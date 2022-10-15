@@ -1,8 +1,10 @@
 const express = require("express");
+const { query } = require("./db");
 const app = express();
 
-app.get("/", (req, res) => {
-  res.send("chess app");
+app.get("/", async (req, res) => {
+  const results = await query("select count(*) as tomato from players");
+  res.send(results);
 });
 
-app.listen(5000);
+app.listen(process.env.PORT || 5000);

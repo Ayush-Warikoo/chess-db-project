@@ -1,0 +1,8 @@
+DB_CONNECTION_LIMIT=10
+DB_HOST=localhost
+DB_PORT=3306
+DB_USER=root
+DB_PASSWORD=<replace_with_your_password>
+DB_NAME=chessdb
+
+PORT=5000
