@@ -21,6 +21,13 @@ CS348-project
 2. Paste the contents `backend/config/sample.txt` into `dev.env`
 3. Replace `<replace_with_your_password>` with the password set during your MySQL installation
 
+### Running database migrations
+1. To upgrade to the latest version of the database, run `npm run db-migrate up`
+2. To downgrade to the previous version of the database, run `npm run db-migrate down`
+
+### Loading sample data (WIP)
+1. Run `npm run load-sample-data`
+
 ## Troubleshooting
 
 ### `'.' is not recognized as an internal or external command, operable program or batch file.`
