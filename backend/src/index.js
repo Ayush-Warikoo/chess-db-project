@@ -3,7 +3,7 @@ const { query } = require("./db");
 const app = express();
 
 app.get("/", async (req, res) => {
-  const results = await query("select count(*) as tomato from players");
+  const results = await query("select * from players");
   res.send(results);
 });
 

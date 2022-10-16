@@ -22,5 +22,6 @@ const query = (sql, options) => {
 };
 
 module.exports = {
+  pool,
   query,
 };
