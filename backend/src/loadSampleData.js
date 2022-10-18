@@ -1,4 +1,4 @@
-import { pool, query } from "./db.js";
+const { pool, query } = require("./db.js");
 
 const loadSampleData = async () => {
   await query("insert into players (name) values (?), (?), (?), (?)", [

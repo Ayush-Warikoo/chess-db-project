@@ -1,9 +1,7 @@
-import express from "express";
-import dotenv from 'dotenv';
-dotenv.config({ path: 'env.default' });
+const express = require("express");
+const { query } = require("./db");
+const { addGame } = require("./addGame.js");
 
-import { query } from "./db.js";
-import { addGame } from "./addGame.js"
 const app = express();
 app.use(express.json())
 

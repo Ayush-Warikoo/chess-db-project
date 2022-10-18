@@ -3,8 +3,8 @@
 var dbm;
 var type;
 var seed;
-import fs from 'fs';
-import path from 'path';
+var fs = require('fs');
+var path = require('path');
 var Promise;
 
 /**

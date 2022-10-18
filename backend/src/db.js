@@ -1,4 +1,5 @@
-import mysql from "mysql2";
+const mysql = require("mysql2");
+require('dotenv').config();
 
 const pool = mysql.createPool({
   connectionLimit: process.env.DB_CONNECTION_LIMIT,
@@ -9,7 +10,7 @@ const pool = mysql.createPool({
   database: process.env.DB_NAME,
 });
 
-export const query = (sql, options) => {
+const query = (sql, options) => {
   return new Promise((resolve, reject) => {
     pool.query(sql, options, (error, results, fields) => {
       if (error) {
@@ -19,4 +20,9 @@ export const query = (sql, options) => {
       }
     });
   });
+};
+
+module.exports = {
+  pool,
+  query,
 };

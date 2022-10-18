@@ -1,8 +1,8 @@
-import { Chess } from 'chess.js';
-import { parse } from '@mliebelt/pgn-parser';
-import { query } from "./db.js";
+const { Chess } = require('chess.js');
+const { parse } = require('@mliebelt/pgn-parser');
+const { query } = require("./db.js");
 
-export const addGame = async (req) => {
+const addGame = async (req) => {
 
     const pgn = parse(req)[0];
     const tags = pgn.tags
@@ -71,3 +71,7 @@ export const addGame = async (req) => {
           moveCount++;
     }
 };
+
+module.exports = {
+    addGame,
+  };
