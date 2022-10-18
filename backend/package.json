@@ -1,11 +1,11 @@
 {
   "name": "backend",
   "version": "1.0.0",
-  "description": "",
   "main": "index.js",
+  "type": "module",
   "scripts": {
-    "nodemon": "./node_modules/.bin/nodemon",
-    "dev-env": "./node_modules/.bin/env-cmd -f ./config/dev.env",
+    "nodemon": "nodemon",
+    "dev-env": "env-cmd -f ./config/dev.env",
     "start": "node ./src/index.js",
     "dev": "npm run dev-env npm run nodemon ./src/index.js",
     "db-migrate": "npm run dev-env ./node_modules/.bin/db-migrate",
@@ -15,14 +15,19 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@mliebelt/pgn-parser": "^1.4.4",
+    "chess.js": "^1.0.0-alpha.0",
     "db-migrate": "^0.11.13",
     "db-migrate-mysql": "^2.2.0",
-    "express": "^4.18.1",
-    "mysql": "^2.18.1"
+    "express": "^4.18.2",
+    "mysql": "^2.18.1",
+    "mysql2": "^2.3.3"
   },
   "devDependencies": {
+    "@types/chess.js": "^0.13.3",
     "env-cmd": "^10.1.0",
     "nodemon": "^2.0.20",
     "prettier": "2.7.1"
-  }
+  },
+  "description": ""
 }

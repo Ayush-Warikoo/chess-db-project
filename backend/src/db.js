@@ -1,4 +1,4 @@
-const mysql = require("mysql");
+import mysql from "mysql2";
 
 const pool = mysql.createPool({
   connectionLimit: process.env.DB_CONNECTION_LIMIT,
@@ -9,7 +9,7 @@ const pool = mysql.createPool({
   database: process.env.DB_NAME,
 });
 
-const query = (sql, options) => {
+export const query = (sql, options) => {
   return new Promise((resolve, reject) => {
     pool.query(sql, options, (error, results, fields) => {
       if (error) {
@@ -19,9 +19,4 @@ const query = (sql, options) => {
       }
     });
   });
-};
-
-module.exports = {
-  pool,
-  query,
 };
