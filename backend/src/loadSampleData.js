@@ -41,7 +41,7 @@ const loadSampleData = async () => {
       1,
       1,
       fens[i],
-      i + 1,
+      i + 1
     ]);
   }
 

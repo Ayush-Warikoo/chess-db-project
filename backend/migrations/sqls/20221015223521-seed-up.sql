@@ -29,6 +29,6 @@ create table positions (
   game_id int not null,
   fen varchar(255) not null,
   move_number int not null check (0 < move_number),
-
+  
   constraint fk_game_id foreign key (game_id) references games(id)
 );
