@@ -5,24 +5,13 @@ import { Button, List, ListItem, ListItemText } from '@mui/material';
 
 import { isPawnPromotion, switchColor } from './helper';
 import { WHITE } from './constants';
+import TEST_DATA from '../testData';
 
 function ChessBoardPage() {
     const game = useRef();
     const [fen, setFen] = useState(null);
     const [orientation, setOrientation] = useState('white');
     const [gameOver, setGameOver] = useState(false);
-    const [testData, setTestData] = useState([
-        'Magnus Carlsen vs. Hikaru Nakamura',
-        'Magnus Carlsen vs. Wesley So',
-        'Magnus Carlsen vs. Fabiano Caruana',
-        'Magnus Carlsen vs. Levon Aronian',
-        'Magnus Carlsen vs. Ding Liren',
-        'Magnus Carlsen vs. Anish Giri',
-        'Magnus Carlsen vs. Maxime Vachier-Lagrave',
-        'Magnus Carlsen vs. Ian Nepomniachtchi',
-        'Magnus Carlsen vs. Alexander Grischuk',
-        'Hans Niemann vs. Magnus Carlsen',
-    ]);
     const [samePositionGames, setSamePositionGames] = useState([]);
 
     function initializeState() {
@@ -77,11 +66,13 @@ function ChessBoardPage() {
     function handleUndo() {
         game.current.undo();
         setFen(game.current.fen());
+        getGameData();
     }
 
     function handleReset() {
         game.current.reset();
         setFen(game.current.fen());
+        getGameData();
         setGameOver(false);
     }
 
@@ -132,24 +123,36 @@ function ChessBoardPage() {
                             bgcolor: 'background.paper',
                             position: 'relative',
                             overflow: 'auto',
-                            maxHeight: 400,
-                            '& ul': { padding: 1 },
+                            height: 400,
+                            border: '1px solid #d3d4d5',
+                            '& ul': { padding: 0 },
+                            padding: '0px',
                         }}
                     >
-                        {testData.map((game, index) => (
-                            <li key={`list-${index}`}>
+                        <li>
+                            {/* {console.log(samePositionGames)}
+                            {console.log(TEST_DATA)} */}
+                            {[...samePositionGames, ...TEST_DATA].map(({games, white, black}, index) => (
                                 <ul key={`item-${index}`}>
-                                    <ListItem>
-                                        <ListItemText primary={game} />
+                                    <ListItem
+                                        sx={{
+                                            '&:hover': { backgroundColor: '#e2e2e2' },
+                                            border: '1px solid #e2e2e2',
+                                            width: '100%',
+                                            height: '100%',
+                                        }}
+                                    >
+                                        <ListItemText primary={`${white.name} (${games.white_elo}) vs
+                                        ${black.name} (${games.black_elo})
+                                        - ${new Date(games.date).toDateString()}`} />
                                     </ListItem>
-                                </ul>
-                            </li>
-                        ))}
+                                </ul>))}
+                        </li>
                     </List>
                 </div>
             </div>
         </div>
-    )
+    );
 }
 
 export default ChessBoardPage;

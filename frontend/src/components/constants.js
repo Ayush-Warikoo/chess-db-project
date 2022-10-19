@@ -10,6 +10,6 @@ const PIECE = {
 const WHITE = 'w';
 const BLACK = 'b';
 
-const PAGES = ['Chess Board', 'Data Table'];
+const PAGES = ['Chess Board', 'Data Table', 'Add Game'];
 
 export { PIECE, WHITE, BLACK, PAGES };

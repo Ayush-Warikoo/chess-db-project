@@ -30,8 +30,5 @@ create table positions (
   fen varchar(255) not null,
   move_number int not null check (0 < move_number),
 
-  constraint fk_game_id foreign key (game_id) references games(id),
-  constraint fk_prev_id foreign key (prev_id) references positions(id),
-  constraint fk_next_id foreign key (next_id) references positions(id),
-  constraint chk_prev_id_neq_next_id check (prev_id != next_id)
+  constraint fk_game_id foreign key (game_id) references games(id)
 );

@@ -28,11 +28,19 @@ app.get("/test", (req, res) => {
     res.status(200).send("OK");
 });
 
-// api gets all games with a given fen
+// api gets all games with player info with a given fen
 app.get("/api/games/:fen", async (req, res) => {
     const fen = req.params.fen;
     console.log(fen);
-    const results = await query("SELECT * FROM positions WHERE fen = ?", [fen]);
+    const results = await query({
+        sql: `SELECT event, site, date, white_elo, black_elo, result, white.name, black.name FROM positions
+        JOIN games ON positions.game_id = games.id
+        JOIN players AS white ON games.white_id = white.id
+        JOIN players AS black ON games.black_id = black.id
+        WHERE fen = ?`,
+        values: [fen],
+        nestTables: true
+    });
     console.log(results);
     res.send(results);
 });
