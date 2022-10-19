@@ -1,4 +1,4 @@
-const { pool, query } = require("./db");
+const { pool, query } = require("./db.js");
 
 const loadSampleData = async () => {
   await query("insert into players (name) values (?), (?), (?), (?)", [
@@ -37,12 +37,10 @@ const loadSampleData = async () => {
   ];
 
   for (let i = 0; i < fens.length; i++) {
-    await query("insert into positions values (?, ?, ?, ?, ?, ?)", [
-      i + 1,
+    await query("insert into positions values (?, ?, ?, ?)", [
+      1,
       1,
       fens[i],
-      null,
-      null,
       i + 1,
     ]);
   }

@@ -1,3 +1,4 @@
+const { addGame } = require("./addGame.js");
 const express = require("express");
 const { query } = require("./db");
 const cors = require("cors");
@@ -8,10 +9,18 @@ const corsOptions = {
 };
 
 const app = express();
+app.use(express.json());
 app.use(cors(corsOptions));
 
 app.get("/", async (req, res) => {
-  const results = await query("select * from players");
+  console.log(process.env.DB_USER);
+  const results = await query("select * from positions");
+  console.log(results);
+  res.send(results);
+});
+
+app.post("/addGame", async (req, res) => {
+  const results = await addGame(req.body.str);
   res.send(results);
 });
 

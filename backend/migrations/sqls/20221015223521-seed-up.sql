@@ -28,8 +28,6 @@ create table positions (
   id int not null primary key auto_increment,
   game_id int not null,
   fen varchar(255) not null,
-  prev_id int,
-  next_id int,
   move_number int not null check (0 < move_number),
 
   constraint fk_game_id foreign key (game_id) references games(id),
