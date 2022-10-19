@@ -18,6 +18,7 @@ app.get("/", async (req, res) => {
   res.send(results);
 });
 
+
 app.post("/addGame", async (req, res) => {
   const results = await addGame(req.body.str);
   res.send(results);
