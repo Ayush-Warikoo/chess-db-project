@@ -3,7 +3,6 @@ import * as ChessJS from 'chess.js';
 import { Chessboard } from 'react-chessboard';
 import { Button, List, ListItem, ListItemText } from '@mui/material';
 
-import Header from './Header';
 import { isPawnPromotion, switchColor } from './helper';
 import { WHITE } from './constants';
 
@@ -88,7 +87,6 @@ function ChessBoardPage() {
 
     return (
         <div style={{ background: '#eaeded', height: '100vh' }}>
-            <Header />
             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '90%' }}>
                 <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'left' }}>
                     <Chessboard

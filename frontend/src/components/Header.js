@@ -20,8 +20,13 @@ function Header() {
                         </Typography>
                     </Link>
                     <Link to="/datatable" style={{ textDecoration: 'none', color: 'white' }}>
-                        <Typography variant="h5" component="div" sx={{ flexGrow: 1 }}>
+                        <Typography variant="h5" component="div" sx={{ flexGrow: 1, paddingRight: '1rem' }}>
                             Data Table
+                        </Typography>
+                    </Link>
+                    <Link to="/addgame" style={{ textDecoration: 'none', color: 'white' }}>
+                        <Typography variant="h5" component="div" sx={{ flexGrow: 1, paddingRight: '1rem' }}>
+                            Add Game
                         </Typography>
                     </Link>
                 </Box>
