@@ -16,12 +16,17 @@ function Header() {
                 <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
                     <Link to="/" style={{ textDecoration: 'none', color: 'white' }}>
                         <Typography variant="h5" component="div" sx={{ flexGrow: 1, paddingRight: '1rem' }}>
-                            Chess Board
+                            Chessboard
                         </Typography>
                     </Link>
                     <Link to="/datatable" style={{ textDecoration: 'none', color: 'white' }}>
                         <Typography variant="h5" component="div" sx={{ flexGrow: 1, paddingRight: '1rem' }}>
                             Data Table
+                        </Typography>
+                    </Link>
+                    <Link to="/opening" style={{ textDecoration: 'none', color: 'white' }}>
+                        <Typography variant="h5" component="div" sx={{ flexGrow: 1, paddingRight: '1rem' }}>
+                            Opening Explorer
                         </Typography>
                     </Link>
                     <Link to="/addgame" style={{ textDecoration: 'none', color: 'white' }}>
