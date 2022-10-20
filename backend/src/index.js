@@ -52,7 +52,6 @@ app.get("/api/table", async (req, res) => {
     const minElo = req.query.minElo || 0;
     const event = req.query.event;
     const result = req.query.result;
-    console.log(event == "");
     params = [whitePlayer, blackPlayer, event, result];
     values = [minElo, minElo];
     let sqlQuery = "SELECT * FROM games";
