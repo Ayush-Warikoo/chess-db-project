@@ -1,8 +1,6 @@
 # CS348-project
-
-CS348-project
-
-## Getting Started
+# Getting Started
+## Creating and Loading the Sample Database
 
 ### Installing MySQL locally
 
@@ -30,6 +28,20 @@ CS348-project
 
 1. Run `npm run load-sample-data`
 2. Compare the output to test-sample.out
+
+## Running the Application Locally
+
+1. Run the backend
+    - Navigate to the `/backend` folder
+    - Install dependencies by running `npm install`
+    - Run `npm run dev`
+2. Run the frontend
+    - Navigate to the `/frontend` folder
+    - Install dependencies by running `npm install`
+    - Run `npm start`
+3. Navigate to `http://localhost:3000/` to view the web application
+
+
 
 ## Features
 
