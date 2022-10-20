@@ -46,4 +46,22 @@ app.get("/api/games/:fen", async (req, res) => {
     res.send(results);
 });
 
+app.get("/api/table", async (req, res) => {
+    const whitePlayer = req.query.whitePlayer;
+    const blackPlayer = req.query.blackPlayer;
+    const minElo = req.query.minElo || 0;
+    const event = req.query.event;
+    const result = req.query.result;
+    console.log(whitePlayer, blackPlayer, minElo, event, result);
+    // const results = await query({
+    //     sql: ``,
+    //     values: [],
+    //     nestTables: true
+    // });
+    // res.send(results);
+
+    // *game_id should be sent as id for the frontend
+    res.send([{id: 1, date: "2020-01-01", white_player: "Magnus Carlsen", white_elo: 1000, black_player: "Hans Neimann", black_elo: 1000, result: "black", event: "event", site: "site"}]);
+});
+
 app.listen(process.env.PORT || 5000);

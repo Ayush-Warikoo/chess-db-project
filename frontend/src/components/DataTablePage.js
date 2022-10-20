@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { DataGrid } from '@mui/x-data-grid';
 
-import TEST_DATA from '../testData';
 import { Container, FormControl, InputLabel, MenuItem, Select, TextField } from '@mui/material';
 
 const columns = [
-    { field: 'game_id', headerName: 'ID', flex: 1 },
+    { field: 'id', headerName: 'ID', flex: 1 },
     { field: 'date', headerName: 'Date', flex: 2 },
     { field: 'white_player', headerName: 'White', fex: 2.5 },
     { field: 'white_elo', headerName: 'White Elo', flex: 1 },
@@ -17,19 +16,21 @@ const columns = [
 ];
 
 function DataTablePage() {
-    const [rows, setRows] = useState(TEST_DATA);
+    const [rows, setRows] = useState([]);
     const [whitePlayer, setWhitePlayer] = useState('');
     const [blackPlayer, setBlackPlayer] = useState('');
-    const [minElo, setMinElo] = useState(null);
+    const [minElo, setMinElo] = useState('');
     const [event, setEvent] = useState('');
     const [result, setResult] = useState('');
 
     useEffect(() => {
         async function fetchData() {
-            // TODO: fetch data from backend and set it to state
+            const res = await fetch(`http://localhost:5000/api/table?whitePlayer=${whitePlayer}&blackPlayer=${blackPlayer}&minElo=${minElo}&event=${event}&result=${result}`);
+            const data = await res.json();
+            setRows(data);
         }
         fetchData();
-    }, []);
+    }, [whitePlayer, blackPlayer, minElo, event, result]);
 
     return (
         <Container maxWidth="lg">
@@ -63,23 +64,24 @@ function DataTablePage() {
                     onChange={(e) => setEvent(e.target.value)}
                 />
                 <FormControl sx={{ minWidth: 120 }}>
-                    <InputLabel id="result-selec-label"> Result </InputLabel>
+                    <InputLabel id="result-select-label"> Result </InputLabel>
                     <Select
+                        id="result-select-label"
                         value={result}
                         label="Result"
                         onChange={(e) => setResult(e.target.value)}
                     >
-                        <MenuItem> Any </MenuItem>
-                        <MenuItem> White </MenuItem>
-                        <MenuItem> Black </MenuItem>
-                        <MenuItem> Draw </MenuItem>
+                        <MenuItem value={"white"}> White </MenuItem>
+                        <MenuItem value={"black"}> Black </MenuItem>
+                        <MenuItem value={"draw"}> Draw </MenuItem>
                     </Select>
                 </FormControl>
             </div>
 
+            {console.log(rows)}
             <div style={{ height: 800, width: '100%' }}>
                 <DataGrid
-                    rows={[]}
+                    rows={rows}
                     columns={columns}
                     pageSize={10}
                     rowsPerPageOptions={[10]}
