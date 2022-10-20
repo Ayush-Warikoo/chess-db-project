@@ -1,0 +1,55 @@
+Loading sample data!
+Selected by Fen Test:
+[
+  {
+    games: {
+      event: 'FICS rated blitz game',
+      site: 'FICS freechess.org',
+      date: 2022-10-15T04:00:00.000Z,
+      white_elo: 1548,
+      black_elo: 1489,
+      result: 'white'
+    },
+    white: { name: 'Gabrielrw' },
+    black: { name: 'mmjme' }
+  }
+]
+Win Rate Result Test:
+{ white: 1, black: 0, draw: 0 }
+Selected by Black Victories:
+[
+  {
+    id: 2,
+    date: 2022-10-15T04:00:00.000Z,
+    white_player: 'Hugoclorinda',
+    white_elo: 1123,
+    black_player: 'callipygian',
+    black_elo: 1123,
+    result: 'black',
+    event: 'FICS rated blitz game',
+    site: 'FICS freechess.org'
+  },
+  {
+    id: 3,
+    date: 2022-10-15T04:00:00.000Z,
+    white_player: 'sparse',
+    white_elo: 1834,
+    black_player: 'IFDThor',
+    black_elo: 1834,
+    result: 'black',
+    event: 'FICS rated blitz game',
+    site: 'FICS freechess.org'
+  },
+  {
+    id: 5,
+    date: 2022-10-15T04:00:00.000Z,
+    white_player: 'Cibola',
+    white_elo: 1228,
+    black_player: 'nzhoney',
+    black_elo: 1228,
+    result: 'black',
+    event: 'FICS rated blitz game',
+    site: 'FICS freechess.org'
+  }
+]
+Done loading sample data!

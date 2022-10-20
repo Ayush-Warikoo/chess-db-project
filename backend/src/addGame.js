@@ -32,8 +32,10 @@ const addGame = async (req) => {
     });
 
     await query(
-        "insert into games (event, site, date, main_time, increment_time, white_id, black_id, white_elo, black_elo, result, eco_category, eco_subcategory, plycount) "
-                + "values (?,?,?,?,?,?,?,?,?,?,?,?,?)",
+        `insert into games (event, site, date, main_time, increment_time, 
+        white_id, black_id, white_elo, black_elo, result, 
+        eco_category, eco_subcategory, plycount) 
+        values (?,?,?,?,?,?,?,?,?,?,?,?,?)`,
         [
             tags.Event,
             tags.Site,

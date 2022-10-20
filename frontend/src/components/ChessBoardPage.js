@@ -1,9 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
 import * as ChessJS from 'chess.js';
 import { Chessboard } from 'react-chessboard';
-import { Button, List, ListItem, ListItemText } from '@mui/material';
+import { Button, List, ListItem, ListItemText, Typography } from '@mui/material';
 
-import { isPawnPromotion, switchColor } from './helper';
+import { isPawnPromotion, switchColor, calculateWinrate } from './helper';
 import { WHITE } from './constants';
 import TEST_DATA from '../testData';
 
@@ -13,6 +13,7 @@ function ChessBoardPage() {
     const [orientation, setOrientation] = useState('white');
     const [gameOver, setGameOver] = useState(false);
     const [samePositionGames, setSamePositionGames] = useState([]);
+    const [winrate, setWinrate] = useState(0);
 
     function initializeState() {
         const Chess = typeof ChessJS === "function" ? ChessJS : ChessJS.Chess;
@@ -26,9 +27,16 @@ function ChessBoardPage() {
         setSamePositionGames(data);
     }
 
+    async function getWinrateData() {
+        const result = await fetch(`http://localhost:5000/api/games/${encodeURIComponent(game.current.fen())}/winrate`);
+        const data = await result.json();
+        setWinrate(data);
+    }
+
     useEffect(() => {
         initializeState();
         getGameData();
+        getWinrateData();
     }, []);
 
     function handleMove(move) {
@@ -42,6 +50,7 @@ function ChessBoardPage() {
         if (isValidMove) {
             setFen(game.current.fen());
             getGameData();
+            getWinrateData();
             checkGameStatus();
         }
     }
@@ -67,12 +76,14 @@ function ChessBoardPage() {
         game.current.undo();
         setFen(game.current.fen());
         getGameData();
+        getWinrateData();
     }
 
     function handleReset() {
         game.current.reset();
         setFen(game.current.fen());
         getGameData();
+        getWinrateData();
         setGameOver(false);
     }
 
@@ -116,6 +127,9 @@ function ChessBoardPage() {
                     </Button>
                 </div>
                 <div>
+                    <Typography variant="h6" component="h2">
+                        Winrate % (W/B/D): {calculateWinrate(winrate).join(' / ')}
+                    </Typography>
                     <List
                         sx={{
                             width: '100%',
