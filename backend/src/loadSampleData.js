@@ -1,49 +1,105 @@
 const { pool, query } = require("./db.js");
+const { addGame } = require("./addGame.js");
+const fs = require("fs");
+const path = require('path');
+
 
 const loadSampleData = async () => {
-  await query("insert into players (name) values (?), (?), (?), (?)", [
-    "ayush",
-    "dhruv",
-    "kevin",
-    "matt",
-  ]);
-  await query(
-    "insert into games values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-    [
-      1,
-      "chess duel",
-      "basement",
-      "2022-10-31",
-      180,
-      2,
-      1,
-      2,
-      2434,
-      2500,
-      "draw",
-      null,
-      null,
-      4,
-    ]
-  );
 
-  // a game of culture
-  const fens = [
-    "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
-    "rnbqkbnr/pppppppp/8/8/8/5P2/PPPPP1PP/RNBQKBNR b KQkq - 0 1",
-    "rnbqkbnr/pppp1ppp/8/4p3/8/5P2/PPPPP1PP/RNBQKBNR w KQkq e6 0 2",
-    "rnbqkbnr/pppp1ppp/8/4p3/6P1/5P2/PPPPP2P/RNBQKBNR b KQkq g3 0 2",
-    "rnb1kbnr/pppp1ppp/8/4p3/6Pq/5P2/PPPPP2P/RNBQKBNR w KQkq - 1 3",
-  ];
+  console.log("Loading sample data!");
 
-  for (let i = 0; i < fens.length; i++) {
-    await query("insert into positions values (?, ?, ?, ?)", [
-      1,
-      1,
-      fens[i],
-      i + 1
-    ]);
+  const names = fs.readdirSync('res', {withFileTypes: true})
+    .filter(item => !item.isDirectory())
+    .map(item => item.name);
+
+  for (var i = 0; i < names.length; i++) {
+    const buffer = fs.readFileSync("res/" + names[i]);
+    const results = await addGame(buffer.toString());
   }
+
+  const selectByFen = await query({
+    sql: `SELECT event, site, date, white_elo, black_elo, result, white.name, black.name FROM positions
+    JOIN games ON positions.game_id = games.id
+    JOIN players AS white ON games.white_id = white.id
+    JOIN players AS black ON games.black_id = black.id
+    WHERE fen = ?`,
+    values: ["8/2p4k/4p3/3nP1p1/2pP4/p1P2P2/8/6RK w - - 0 47"],
+    nestTables: true
+  });
+
+  console.log("Selected by Fen Test:");
+  console.log(selectByFen);
+
+  const winResults = await query({
+    sql: `SELECT result, COUNT(*) AS count FROM positions
+    JOIN games ON positions.game_id = games.id
+    WHERE fen = ?
+    GROUP BY result`,
+    values: ["8/2p4k/4p3/3nP1p1/2pP4/p1P2P2/8/6RK w - - 0 47"],
+    nestTables: true
+  });
+  const winRateResult = {'white': 0, 'black': 0, 'draw': 0};
+  winResults.forEach((item) => {
+      winRateResult[item.games.result] = item[""].count;
+  });
+
+  console.log("Win Rate Result Test:");
+  console.log(winRateResult);
+
+  const whitePlayer = "";
+  const blackPlayer = "";
+  const minElo = 0;
+  const event = "";
+  const result = "black";
+
+  params = [whitePlayer, blackPlayer, event, result];
+    values = [minElo, minElo];
+    let sqlQuery = "SELECT * FROM games";
+    sqlQuery += " JOIN players AS white ON games.white_id=white.id";
+    sqlQuery += " JOIN players AS black ON games.black_id=black.id";
+
+    sqlQuery += " WHERE (games.white_elo >= ? OR games.black_elo >= ?)";
+
+    if(whitePlayer !== ""){
+          sqlQuery += " AND white.name = ?";
+          values.push(whitePlayer);
+    }
+    if(blackPlayer !== ""){
+        sqlQuery += " AND black.name = ?";
+        values.push(blackPlayer);
+    }
+    if(event !== "") {
+        sqlQuery += " AND games.event = ?";
+        values.push(event);
+    }
+    if(result !== "") {
+        sqlQuery += " AND games.result = ?";
+        values.push(result);
+    }
+
+    const results = await query({
+         sql: sqlQuery,
+         values: values,
+         nestTables: true
+     });
+
+     formattedResults = []
+     for(let i = 0; i < results.length; i++){
+        entry = {}
+        entry.id = results[i].games.id;
+        entry.date = results[i].games.date;
+        entry.white_player = results[i].white.name;
+        entry.white_elo = results[i].games.white_elo;
+        entry.black_player = results[i].black.name;
+        entry.black_elo = results[i].games.white_elo;
+        entry.result = results[i].games.result;
+        entry.event = results[i].games.event;
+        entry.site = results[i].games.site;
+        formattedResults.push(entry);
+     }
+
+     console.log("Selected by Black Victories:");
+     console.log(formattedResults);
 
   pool.end();
   console.log("Done loading sample data!");
