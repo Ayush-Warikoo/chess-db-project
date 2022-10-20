@@ -46,6 +46,26 @@ app.get("/api/games/:fen", async (req, res) => {
     res.send(results);
 });
 
+// api gets the win rate of all the games with a given fen
+app.get("/api/games/:fen/winrate", async (req, res) => {
+    const fen = req.params.fen;
+    console.log(fen);
+    const results = await query({
+        sql: `SELECT result, COUNT(*) AS count FROM positions
+        JOIN games ON positions.game_id = games.id
+        WHERE fen = ?
+        GROUP BY result`,
+        values: [fen],
+        nestTables: true
+    });
+    const winRateResult = {'white': 0, 'black': 0, 'draw': 0};
+    results.forEach((item) => {
+        winRateResult[item.games.result] = item[""].count;
+    });
+    console.log(winRateResult);
+    res.send(winRateResult);
+});
+
 app.get("/api/table", async (req, res) => {
     const whitePlayer = req.query.whitePlayer;
     const blackPlayer = req.query.blackPlayer;
@@ -62,19 +82,19 @@ app.get("/api/table", async (req, res) => {
 
     // Dynamically modify query based on what filter parameters were given
     // If parameter is empty string it was not given by user, so we do not filter on it.
-    if(whitePlayer != ""){
+    if(whitePlayer !== ""){
           sqlQuery += " AND white.name = ?";
           values.push(whitePlayer);
     }
-    if(blackPlayer != ""){
+    if(blackPlayer !== ""){
         sqlQuery += " AND black.name = ?";
         values.push(blackPlayer);
     }
-    if(event != "") {
+    if(event !== "") {
         sqlQuery += " AND games.event = ?";
         values.push(event);
     }
-    if(result != "") {
+    if(result !== "") {
         sqlQuery += " AND games.result = ?";
         values.push(result);
     }

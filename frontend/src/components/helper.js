@@ -10,4 +10,13 @@ function switchColor(color) {
     return (color === 'white' || color === WHITE) ? 'black' : 'white';
 }
 
-export { isPawnPromotion, switchColor };
+function calculateWinrate(winrate) {
+    const total = winrate.white + winrate.black + winrate.draw;
+    if (total === 0) return ['-', '-', '-'];
+    const whiteWinrate = Math.round(winrate.white / total * 100);
+    const blackWinrate = Math.round(winrate.black / total * 100);
+    const drawrate = Math.round(winrate.draw / total * 100);
+    return [whiteWinrate, blackWinrate, drawrate];
+}
+
+export { isPawnPromotion, switchColor, calculateWinrate };

@@ -78,7 +78,7 @@ function DataTablePage() {
                 </FormControl>
             </div>
 
-            {console.log(rows)}
+            {/* {console.log(rows)} */}
             <div style={{ height: 800, width: '100%' }}>
                 <DataGrid
                     rows={rows}
