@@ -26,7 +26,7 @@ CS348-project
 1. To upgrade to the latest version of the database, run `npm run db-migrate up`
 2. To downgrade to the previous version of the database, run `npm run db-migrate down`
 
-### Loading sample data
+### Loading sample data and run sql files (test-sample.sql)
 
 1. Run `npm run load-sample-data`
 2. Compare the output to test-sample.out
