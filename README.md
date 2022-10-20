@@ -34,7 +34,7 @@
 1. Run the backend
     - Navigate to the `/backend` folder
     - Install dependencies by running `npm install`
-    - Run `npm start`
+    - Run `npm run dev`
 2. Run the frontend
     - Navigate to the `/frontend` folder
     - Install dependencies by running `npm install`
