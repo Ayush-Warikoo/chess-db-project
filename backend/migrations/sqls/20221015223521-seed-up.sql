@@ -19,6 +19,7 @@ create table games (
   eco_subcategory int check (0 <= eco_subcategory and eco_subcategory <= 99),
   plycount int not null check (0 <= plycount),
 
+  constraint chk_total_time_neq_0 check (main_time + increment_time != 0),
   constraint fk_white_id foreign key (white_id) references players(id),
   constraint fk_black_id foreign key (black_id) references players(id),
   constraint chk_white_id_neq_black_id check (white_id != black_id)
