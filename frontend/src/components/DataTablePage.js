@@ -1,20 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { DataGrid } from '@mui/x-data-grid';
+import { DataGrid, useGridApiRef } from '@mui/x-data-grid';
+import axios from 'axios';
 
-import { Container, FormControl, InputLabel, MenuItem, Select, TextField } from '@mui/material';
-
-const columns = [
-    { field: 'id', headerName: 'ID', flex: 1 },
-    { field: 'date', headerName: 'Date', flex: 2 },
-    { field: 'white_player', headerName: 'White', fex: 2.5 },
-    { field: 'white_elo', headerName: 'White Elo', flex: 1 },
-    { field: 'black_player', headerName: 'Black', fex: 2.5 },
-    { field: 'black_elo', headerName: 'Black Elo', flex: 1 },
-    { field: 'result', headerName: 'Result', flex: 1.5 },
-    { field: 'event', headerName: 'Event', fex: 2.5 },
-    { field: 'site', headerName: 'Site', fex: 2.5 }
-];
-
+import { Button, Container, FormControl, InputLabel, MenuItem, Select, TextField } from '@mui/material';
 function DataTablePage() {
     const [rows, setRows] = useState([]);
     const [whitePlayer, setWhitePlayer] = useState('');
@@ -31,6 +19,47 @@ function DataTablePage() {
         }
         fetchData();
     }, [whitePlayer, blackPlayer, minElo, event, result]);
+
+    const columns = [
+        { field: 'id', headerName: 'ID', flex: 1 },
+        { field: 'date', headerName: 'Date', flex: 2 },
+        { field: 'white_player', headerName: 'White', fex: 2.5 },
+        { field: 'white_elo', headerName: 'White Elo', flex: 1 },
+        { field: 'black_player', headerName: 'Black', fex: 2.5 },
+        { field: 'black_elo', headerName: 'Black Elo', flex: 1 },
+        { field: 'result', headerName: 'Result', flex: 1.5 },
+        { field: 'event', headerName: 'Event', fex: 2.5 },
+        { field: 'site', headerName: 'Site', fex: 2.5 },
+        { field: 'actions', headerName: 'Actions', flex: 1, renderCell: (params) => {
+            return (
+              <Button
+                onClick={async (e) => {
+                    e.stopPropagation();
+                    async function deleteRow(id) {
+                        const url = `http://localhost:5000/api/games/removeGame`
+                        await axios.post(url, {"id": id}).then(function (response) {
+                            console.log(response);
+                          }).then(res => {
+                            console.log(res)
+                          })
+                    }
+                    await deleteRow(params.row.id);
+                    e.stopPropagation(); // don't select this row after clicking
+
+                    async function fetchData() {
+                        const res = await fetch(`http://localhost:5000/api/table?whitePlayer=${whitePlayer}&blackPlayer=${blackPlayer}&minElo=${minElo}&event=${event}&result=${result}`);
+                        const data = await res.json();
+                        setRows(data);
+                    }
+                    await fetchData();
+                }}
+                variant="contained"
+              >
+                Delete
+              </Button>
+            );
+          } }
+    ];
 
     return (
         <Container maxWidth="lg">

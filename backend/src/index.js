@@ -25,6 +25,17 @@ app.post("/addGame", async (req, res) => {
   res.send(results);
 });
 
+app.post("/api/games/removeGame", async (req, res) => {
+    const id = req.body.id
+    await query("delete from positions where game_id = ?", [
+        id
+    ]);
+    await query("delete from games where id = ?", [
+        id
+    ]);
+    res.status(200).send("OK");
+});
+
 app.get("/test", (req, res) => {
     res.status(200).send("OK");
 });
