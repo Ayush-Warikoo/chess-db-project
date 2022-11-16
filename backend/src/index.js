@@ -48,6 +48,21 @@ app.get("/engineNextMove/:fen", async (req, res) => {
     }
 });
 
+app.post("/api/games/removeGame", async (req, res) => {
+    const id = req.body.id
+    await query("delete from positions where game_id = ?", [
+        id
+    ]);
+    await query("delete from games where id = ?", [
+        id
+    ]);
+    res.status(200).send("OK");
+});
+
+app.get("/test", (req, res) => {
+    res.status(200).send("OK");
+});
+
 // api gets all games with player info with a given fen
 app.get("/api/games/:fen", async (req, res) => {
     const fen = req.params.fen;

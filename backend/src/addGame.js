@@ -39,7 +39,7 @@ const addGame = async (req) => {
         [
             tags.Event,
             tags.Site,
-            tags.Date.value.replaceAll('.', '-'),
+            tags.Date.value.replace(/\./g, '-'),
             tags.TimeControl[0].seconds,
             tags.TimeControl[0].increment,
             whiteId,
