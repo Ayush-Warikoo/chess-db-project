@@ -31,7 +31,7 @@
 
 ### Installing Stock Fish Engine
 
-1. Download from https://stockfishchess.org/download/ the appropriate executable for the Stock Fish Engine based on your computer architecture
+1. Download the appropriate executable for the Stock Fish Engine based on your computer architecture ([link for download](https://stockfishchess.org/download/))
 2. Locate the path of the executable/application file from the download
 3. Add this file path to the STOCK_FISH_ENG_PATH variable in the dev.env or .env file
 
