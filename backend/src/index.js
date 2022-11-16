@@ -36,7 +36,7 @@ app.post("/addGame", async (req, res) => {
   res.send(results);
 });
 
-app.get("/engineNextMove/:fen", async (req, res) => {
+app.get("/engineAnalysis/:fen", async (req, res) => {
     try{
         let ret = await engine1.isready();
         await engine1.position(req.params.fen);
