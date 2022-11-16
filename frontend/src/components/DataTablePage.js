@@ -12,7 +12,8 @@ const columns = [
     { field: 'black_elo', headerName: 'Black Elo', flex: 1 },
     { field: 'result', headerName: 'Result', flex: 1.5 },
     { field: 'event', headerName: 'Event', fex: 2.5 },
-    { field: 'site', headerName: 'Site', fex: 2.5 }
+    { field: 'site', headerName: 'Site', fex: 2.5 },
+    { field: 'ecoCode', headerName: 'ECO code', fex: 2.5 }
 ];
 
 function DataTablePage() {
@@ -21,16 +22,17 @@ function DataTablePage() {
     const [blackPlayer, setBlackPlayer] = useState('');
     const [minElo, setMinElo] = useState('');
     const [event, setEvent] = useState('');
+    const [ecoCode, setEcoCode] = useState('');
     const [result, setResult] = useState('');
 
     useEffect(() => {
         async function fetchData() {
-            const res = await fetch(`http://localhost:5000/api/table?whitePlayer=${whitePlayer}&blackPlayer=${blackPlayer}&minElo=${minElo}&event=${event}&result=${result}`);
+            const res = await fetch(`http://localhost:5000/api/table?whitePlayer=${whitePlayer}&blackPlayer=${blackPlayer}&minElo=${minElo}&event=${event}&ecoCode=${ecoCode}&result=${result}`);
             const data = await res.json();
             setRows(data);
         }
         fetchData();
-    }, [whitePlayer, blackPlayer, minElo, event, result]);
+    }, [whitePlayer, blackPlayer, minElo, event, ecoCode, result]);
 
     return (
         <Container maxWidth="lg">
@@ -62,6 +64,11 @@ function DataTablePage() {
                     label="Event"
                     value={event}
                     onChange={(e) => setEvent(e.target.value)}
+                />
+                <TextField
+                    label="ECO code"
+                    value={ecoCode}
+                    onChange={(e) => setEcoCode(e.target.value)}
                 />
                 <FormControl sx={{ minWidth: 120 }}>
                     <InputLabel id="result-select-label"> Result </InputLabel>
