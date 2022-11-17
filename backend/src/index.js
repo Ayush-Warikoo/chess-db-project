@@ -4,6 +4,7 @@ const { query } = require("./db");
 const cors = require("cors");
 const Engine = require('node-uci').Engine
 var validator = require('validator');
+var escape = require('sql-escape');
 const corsOptions = {
     origin: "http://localhost:3000",
     optionsSuccessStatus: 200,
@@ -25,9 +26,9 @@ app.use(express.json());
 app.use(cors(corsOptions));
 
 function sanitizeString(queryString) {
-    let escapedString = validator.escape(queryString); // escapes ', ", <, >, /, &
-    console.log(escapedString); 
-    return escapedString.replaceAll("\&\#x2F;", "/"); // Need / character for fen, so re-add it back
+    let escapedString = escape(queryString); 
+    console.log(escapedString);
+    return escapedString;
 }
 
 app.get("/", async (req, res) => {
