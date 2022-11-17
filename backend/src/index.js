@@ -3,6 +3,7 @@ const express = require("express");
 const { query } = require("./db");
 const cors = require("cors");
 const Engine = require('node-uci').Engine
+var validator = require('validator');
 const corsOptions = {
     origin: "http://localhost:3000",
     optionsSuccessStatus: 200,
@@ -23,6 +24,12 @@ const app = express();
 app.use(express.json());
 app.use(cors(corsOptions));
 
+function sanitizeString(queryString) {
+    let escapedString = validator.escape(queryString); // escapes ', ", <, > , /
+    console.log(escapedString); 
+    return escapedString.replaceAll("\&\#x2F;", "/"); // Need / character for fen, so re-add it back
+}
+
 app.get("/", async (req, res) => {
   console.log(process.env.DB_USER);
   const results = await query("select * from positions");
@@ -32,14 +39,14 @@ app.get("/", async (req, res) => {
 
 
 app.post("/addGame", async (req, res) => {
-  const results = await addGame(req.body.str);
+  const results = await addGame(sanitizeString(req.body.str));
   res.send(results);
 });
 
 app.get("/engineAnalysis/:fen", async (req, res) => {
     try{
         let ret = await engine1.isready();
-        await engine1.position(req.params.fen);
+        await engine1.position(sanitizeString(req.params.fen));
         const result = await engine1.go({depth: 15});
         res.status(200).send(result.info.at(-1));
     } catch (e) {
@@ -49,7 +56,7 @@ app.get("/engineAnalysis/:fen", async (req, res) => {
 });
 
 app.post("/api/games/removeGame", async (req, res) => {
-    const id = req.body.id
+    const id = sanitizeString(req.body.id);
     await query("delete from positions where game_id = ?", [
         id
     ]);
@@ -65,8 +72,7 @@ app.get("/test", (req, res) => {
 
 // api gets all games with player info with a given fen
 app.get("/api/games/:fen", async (req, res) => {
-    const fen = req.params.fen;
-    console.log(fen);
+    const fen = sanitizeString(req.params.fen);
     const results = await query({
         sql: `SELECT event, site, date, white_elo, black_elo, result, white.name, black.name FROM positions
         JOIN games ON positions.game_id = games.id
@@ -82,8 +88,9 @@ app.get("/api/games/:fen", async (req, res) => {
 
 // api gets the win rate of all the games with a given fen
 app.get("/api/games/:fen/winrate", async (req, res) => {
-    const fen = req.params.fen;
+    const fen = sanitizeString(req.params.fen);
     console.log(fen);
+    console.log(req.params.fen);
     const results = await query({
         sql: `SELECT result, COUNT(*) AS count FROM positions
         JOIN games ON positions.game_id = games.id
@@ -102,12 +109,12 @@ app.get("/api/games/:fen/winrate", async (req, res) => {
 
 app.get("/api/table", async (req, res) => {
     try{
-        const whitePlayer = req.query.whitePlayer;
-        const blackPlayer = req.query.blackPlayer;
-        const minElo = req.query.minElo || 0;
-        const event = req.query.event;
-        const result = req.query.result;
-        const ecoCode = req.query.ecoCode;
+        const whitePlayer = sanitizeString(req.query.whitePlayer);
+        const blackPlayer = sanitizeString(req.query.blackPlayer);
+        const minElo = sanitizeString(req.query.minElo) || 0;
+        const event = sanitizeString(req.query.event);
+        const result = sanitizeString(req.query.result);
+        const ecoCode = sanitizeString(req.query.ecoCode);
         params = [whitePlayer, blackPlayer, event, result];
         values = [minElo, minElo];
         let sqlQuery = "SELECT * FROM games";
