@@ -9,8 +9,10 @@ import {
   Typography,
   Button,
   TextareaAutosize,
+  TextField,
 } from "@mui/material";
 import moment from "moment";
+import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
 
 const DEFAULT_PROFILE_PIC_URL = `https://st3.depositphotos.com/6672868/13701/v/600/depositphotos_137014128-stock-illustration-user-profile-icon.jpg`;
 
@@ -28,6 +30,7 @@ const ProfilePage = () => {
   };
 
   const updatePlayer = async () => {
+    console.log(modifiedPlayer);
     await axios.put(`http://localhost:5000/players/${name}`, {
       ...modifiedPlayer,
       birth_date: modifiedPlayer.birth_date
@@ -65,25 +68,52 @@ const ProfilePage = () => {
             backgroundRepeat: "no-repeat",
           }}
         />
+        {editing && (
+          <Grid item xs={12} textAlign="center" paddingBottom={4}>
+            <TextField
+              label="Profile Picture URL"
+              value={modifiedPlayer.profile_pic_url}
+              onChange={(e) =>
+                setModifiedPlayer((prevModifiedPlayer) => ({
+                  ...prevModifiedPlayer,
+                  profile_pic_url: e.target.value,
+                }))
+              }
+            />
+          </Grid>
+        )}
         <Grid container spacing={1}>
-          <Grid item xs={6} textAlign="right">
+          <Grid item xs={3} textAlign="right">
             <Typography fontWeight="bold">Name:</Typography>
           </Grid>
-          <Grid item xs={6} textAlign="left">
+          <Grid item xs={9} textAlign="left">
             <Typography>{player.name}</Typography>
           </Grid>
 
-          {player.birth_date && (
+          {!editing && player.birth_date && (
             <>
-              <Grid item xs={6} textAlign="right">
-                <Typography fontWeight="bold">Birth Date:</Typography>
+              <Grid item xs={3} textAlign="right">
+                <Typography fontWeight="bold">Born:</Typography>
               </Grid>
-              <Grid item xs={6} textAlign="left">
+              <Grid item xs={9} textAlign="left">
                 <Typography>
                   {moment(player.birth_date).format("YYYY-MM-DD")}
                 </Typography>
               </Grid>
             </>
+          )}
+          {editing && (
+            <Grid item xs={12} textAlign="center">
+              <DesktopDatePicker
+                label="Birth Date"
+                inputFormat="YYYY-MM-DD"
+                value={moment(modifiedPlayer.birth_date)}
+                onChange={(birth_date) =>
+                  setModifiedPlayer({ ...modifiedPlayer, birth_date })
+                }
+                renderInput={(params) => <TextField {...params} />}
+              />
+            </Grid>
           )}
         </Grid>
         {!editing && (

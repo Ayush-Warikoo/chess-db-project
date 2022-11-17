@@ -4,6 +4,7 @@ const { query } = require("./db");
 const cors = require("cors");
 const Engine = require('node-uci').Engine
 var validator = require('validator');
+var escape = require('sql-escape');
 const corsOptions = {
     origin: "http://localhost:3000",
     optionsSuccessStatus: 200,
@@ -26,9 +27,9 @@ app.use(express.json());
 app.use(cors(corsOptions));
 
 function sanitizeString(queryString) {
-    let escapedString = validator.escape(queryString); // escapes ', ", <, >, /, &
-    // console.log(escapedString); 
-    return escapedString.replaceAll("\&\#x2F;", "/"); // Need / character for fen, so re-add it back
+    let escapedString = escape(queryString); 
+    console.log(escapedString);
+    return escapedString;
 }
 
 app.get("/", async (req, res) => {
@@ -56,12 +57,13 @@ app.get("/players/:name", async (req, res) => {
 
 app.put("/players/:name", async (req, res) => {
   try {
+    console.log(req.body)
     const { name } = req.params;
 
     const columnsToUpdate = [];
     const updateValues = [];
     ['profile_pic_url', 'bio', 'birth_date'].forEach((column) => {
-      if (req.body[column]) {
+      if (req.body[column] !== undefined) {
         columnsToUpdate.push(column)
         updateValues.push(req.body[column])
       }
@@ -191,6 +193,8 @@ app.get("/api/table", async (req, res) => {
             values.push(eco_category);
             values.push(parseInt(eco_subcategory));
         }
+
+        sqlQuery += " LIMIT 50"; // only return 10 rows
 
         const results = await query({
             sql: sqlQuery,
