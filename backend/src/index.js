@@ -192,6 +192,8 @@ app.get("/api/table", async (req, res) => {
             values.push(parseInt(eco_subcategory));
         }
 
+        sqlQuery += " LIMIT 50"; // only return 10 rows
+
         const results = await query({
             sql: sqlQuery,
             values: values,
