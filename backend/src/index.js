@@ -38,6 +38,45 @@ app.get("/", async (req, res) => {
   res.send(results);
 });
 
+app.get("/players/:name", async (req, res) => {
+  try {
+    const { name } = req.params;
+    const results = await query("select * from players where name = ?", [name]);
+    if (!results.length) {
+      return res
+        .status(404)
+        .send({ error: "could not find player with that name" });
+    }
+    res.send(results[0]);
+  } catch (e) {
+    console.log(e);
+    return res.status(500).send({ error: "server error" });
+  }
+});
+
+app.put("/players/:name", async (req, res) => {
+  try {
+    const { name } = req.params;
+
+    const columnsToUpdate = [];
+    const updateValues = [];
+    ['profile_pic_url', 'bio', 'birth_date'].forEach((column) => {
+      if (req.body[column]) {
+        columnsToUpdate.push(column)
+        updateValues.push(req.body[column])
+      }
+    })
+
+    const setClause = columnsToUpdate.map((column) => `${column} = ?`).join(', ')
+  
+    const updateStatement = `update players set ${setClause} where name = ?`
+    const results = await query(updateStatement, [...updateValues, name])
+    res.send(results)
+  } catch (e) {
+    console.log(e);
+    return res.status(500).send({ error: "server error" });
+  }
+})
 
 app.post("/addGame", async (req, res) => {
   const results = await addGame(sanitizeString(req.body.str));

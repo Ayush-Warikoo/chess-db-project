@@ -8,6 +8,7 @@ import ChessBoardPage from './components/ChessBoardPage';
 import DataTablePage from './components/DataTablePage';
 import AddGame from './components/AddGame';
 import Header from "./components/Header";
+import ProfilePage from "./components/ProfilePage";
 
 function App() {
     return (
@@ -17,6 +18,7 @@ function App() {
                 <Route path="/" element={<ChessBoardPage />} />
                 <Route path="/datatable" element={<DataTablePage />} />
                 <Route path="/addgame" element={<AddGame />} />
+                <Route path="/profile/:name" element={<ProfilePage />} />
             </Routes>
         </Router>
     );
