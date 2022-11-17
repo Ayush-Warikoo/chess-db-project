@@ -1,6 +1,9 @@
 create table players (
   id int not null primary key auto_increment,
-  name varchar(255) not null unique
+  name varchar(255) not null unique,
+  profile_pic_url varchar(255),
+  bio text,
+  birth_date date
 );
 
 create table games (
