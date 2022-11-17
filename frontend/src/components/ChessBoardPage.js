@@ -7,7 +7,7 @@ import { isPawnPromotion, switchColor, calculateWinrate } from './helper';
 import { WHITE } from './constants';
 import TEST_DATA from '../testData';
 
-function ChessBoardPage() {
+function ChessBoardPage({ theme }) {
     const game = useRef();
     const [fen, setFen] = useState(null);
     const [orientation, setOrientation] = useState('white');
@@ -88,7 +88,7 @@ function ChessBoardPage() {
     }
 
     return (
-        <div style={{ background: '#eaeded', height: '100vh' }}>
+        <div style={{ height: '100vh' }}>
             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '90%' }}>
                 <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'left' }}>
                     <Chessboard
@@ -150,7 +150,7 @@ function ChessBoardPage() {
                                 <ul key={`item-${index}`}>
                                     <ListItem
                                         sx={{
-                                            '&:hover': { backgroundColor: '#e2e2e2' },
+                                            '&:hover': { backgroundColor: theme === 'dark' ? '#333' : '#e2e2e2' },
                                             border: '1px solid #e2e2e2',
                                             width: '100%',
                                             height: '100%',

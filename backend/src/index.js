@@ -13,7 +13,8 @@ var engine1;
 
 
 async function initEngine() {
-    engine1 = new Engine(process.env.STOCK_FISH_ENG_PATH);
+    console.log(process.env.STOCK_FISH_ENG_PATH);
+    engine1 = new Engine("C:\\ProgramData\\stockfish_15_win_x64_avx2\\stockfish_15_win_x64_avx2\\stockfish_15_x64_avx2.exe");
     await engine1.init();
     await engine1.setoption('MultiPv', '4');
 }
@@ -26,14 +27,14 @@ app.use(cors(corsOptions));
 
 function sanitizeString(queryString) {
     let escapedString = validator.escape(queryString); // escapes ', ", <, >, /, &
-    console.log(escapedString); 
+    // console.log(escapedString); 
     return escapedString.replaceAll("\&\#x2F;", "/"); // Need / character for fen, so re-add it back
 }
 
 app.get("/", async (req, res) => {
   console.log(process.env.DB_USER);
   const results = await query("select * from positions");
-  console.log(results);
+//   console.log(results);
   res.send(results);
 });
 
@@ -209,7 +210,7 @@ app.get("/api/table", async (req, res) => {
             entry.result = results[i].games.result;
             entry.event = results[i].games.event;
             entry.site = results[i].games.site;
-            entry.eco_code = results[i].games.eco_category + results[i].games.eco_subcategory.toString();
+            entry.eco_code = results[i].games.eco_category + results[i].games.eco_subcategory?.toString();
             formattedResults.push(entry);
         }
         console.log(formattedResults, sqlQuery, minElo);
