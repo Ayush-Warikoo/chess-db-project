@@ -55,12 +55,13 @@ app.get("/players/:name", async (req, res) => {
 
 app.put("/players/:name", async (req, res) => {
   try {
+    console.log(req.body)
     const { name } = req.params;
 
     const columnsToUpdate = [];
     const updateValues = [];
     ['profile_pic_url', 'bio', 'birth_date'].forEach((column) => {
-      if (req.body[column]) {
+      if (req.body[column] !== undefined) {
         columnsToUpdate.push(column)
         updateValues.push(req.body[column])
       }
