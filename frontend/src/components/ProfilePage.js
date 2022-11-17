@@ -9,6 +9,7 @@ import {
   Typography,
   Button,
   TextareaAutosize,
+  TextField,
 } from "@mui/material";
 import moment from "moment";
 
@@ -66,19 +67,33 @@ const ProfilePage = () => {
           }}
         />
         <Grid container spacing={1}>
-          <Grid item xs={6} textAlign="right">
+          {editing && (
+            <Grid item xs={12} textAlign="center">
+              <TextField
+                label="Profile Picture URL"
+                value={modifiedPlayer.profile_pic_url}
+                onChange={(e) =>
+                  setModifiedPlayer((prevModifiedPlayer) => ({
+                    ...prevModifiedPlayer,
+                    profile_pic_url: e.target.value,
+                  }))
+                }
+              />
+            </Grid>
+          )}
+          <Grid item xs={3} textAlign="right">
             <Typography fontWeight="bold">Name:</Typography>
           </Grid>
-          <Grid item xs={6} textAlign="left">
+          <Grid item xs={9} textAlign="left">
             <Typography>{player.name}</Typography>
           </Grid>
 
           {player.birth_date && (
             <>
-              <Grid item xs={6} textAlign="right">
-                <Typography fontWeight="bold">Birth Date:</Typography>
+              <Grid item xs={3} textAlign="right">
+                <Typography fontWeight="bold">Born:</Typography>
               </Grid>
-              <Grid item xs={6} textAlign="left">
+              <Grid item xs={9} textAlign="left">
                 <Typography>
                   {moment(player.birth_date).format("YYYY-MM-DD")}
                 </Typography>
