@@ -25,7 +25,7 @@ app.use(express.json());
 app.use(cors(corsOptions));
 
 function sanitizeString(queryString) {
-    let escapedString = validator.escape(queryString); // escapes ', ", <, > , /
+    let escapedString = validator.escape(queryString); // escapes ', ", <, >, /, &
     console.log(escapedString); 
     return escapedString.replaceAll("\&\#x2F;", "/"); // Need / character for fen, so re-add it back
 }
@@ -170,7 +170,7 @@ app.get("/api/table", async (req, res) => {
             entry.result = results[i].games.result;
             entry.event = results[i].games.event;
             entry.site = results[i].games.site;
-            entry.ecoCode = results[i].games.eco_category + results[i].games.eco_subcategory.toString();
+            entry.eco_code = results[i].games.eco_category + results[i].games.eco_subcategory.toString();
             formattedResults.push(entry);
         }
         console.log(formattedResults, sqlQuery, minElo);
