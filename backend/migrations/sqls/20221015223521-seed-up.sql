@@ -38,3 +38,6 @@ create table positions (
 
 create index fen_index
 on positions (fen)
+
+create index game_index
+on positions (game_id)
