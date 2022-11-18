@@ -62,19 +62,29 @@ function AddGame() {
     ]);
 
     function handleSubmit(event) {
-        for (const file of files) {
-            event.preventDefault();
-            const url = 'http://localhost:5000/addGame';
-            var reader = new FileReader();
-
-            reader.onload = function (event) {
-                axios.post(url, { "str": event.target.result }).then(function (response) {
-                    console.log(response);
-                })
-            };
-
-            reader.readAsText(file);
-        }
+      var fileTexts = []
+      for (var file of files) {
+        event.preventDefault()
+  
+        var reader = new FileReader();
+    
+        reader.onload = async function(event) {
+          console.log(files.length)
+          fileTexts.push(event.target.result)
+          if (fileTexts.length === files.length) {
+            sendFiles(fileTexts)
+          }
+        };
+    
+        reader.readAsText(file);
+      }
+    }
+  
+    function sendFiles(fileTexts) {
+      const url = 'http://localhost:5000/addGame';
+      axios.post(url, {"str": fileTexts}).then(function (response) {
+        console.log(response);
+      })
     }
 
     const uploadedFileList = acceptedFiles.map(file => (

@@ -29,6 +29,13 @@
 1. Run `npm run load-sample-data`
 2. Compare the output to test-sample.out
 
+### Loading production data and running tests (test-production.sql)
+
+1. Download a sizeable pgn collection from https://www.ficsgames.org/download.html, for proper data use spanning months or years.
+2. Drag the files in the Add Game UI on the front end and submit the files.
+3. Run `npm run test-prod-data`
+4. Look at the output and it should be similar to test-sample.out except have the production values
+
 ### Installing Stock Fish Engine
 
 1. Download the appropriate executable for the Stock Fish Engine based on your computer architecture ([link for download](https://stockfishchess.org/download/))

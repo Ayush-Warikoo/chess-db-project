@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { DataGrid } from "@mui/x-data-grid";
 import { Link } from "react-router-dom";
+import axios from 'axios';
+
+import { Button } from '@mui/material';
 
 import {
   Container,
@@ -49,7 +52,35 @@ function DataTablePage({ theme }) {
     { field: "result", headerName: "Result", flex: 1.5 },
     { field: "event", headerName: "Event", fex: 2.5 },
     { field: "site", headerName: "Site", fex: 2.5 },
-    { field: "eco_code", headerName: "ECO code", fex: 2.5 },
+    { field: "eco_code", headerName: "ECO code", fex: 2.5 },{ field: 'actions', headerName: 'Actions', flex: 1, renderCell: (params) => {
+        return (
+          <Button
+            onClick={async (e) => {
+                e.stopPropagation();
+                async function deleteRow(id) {
+                    const url = `http://localhost:5000/api/games/removeGame`
+                    await axios.post(url, {"id": id}).then(function (response) {
+                        console.log(response);
+                      }).then(res => {
+                        console.log(res)
+                      })
+                }
+                await deleteRow(params.row.id);
+                e.stopPropagation(); // don't select this row after clicking
+
+                async function fetchData() {
+                    const res = await fetch(`http://localhost:5000/api/table?whitePlayer=${whitePlayer}&blackPlayer=${blackPlayer}&minElo=${minElo}&event=${event}&result=${result}`);
+                    const data = await res.json();
+                    setRows(data);
+                }
+                await fetchData();
+            }}
+            variant="contained"
+          >
+            Delete
+          </Button>
+        );
+      } }
   ];
 
   useEffect(() => {
