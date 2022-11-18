@@ -52,7 +52,8 @@ function DataTablePage({ theme }) {
     { field: "result", headerName: "Result", flex: 1.5 },
     { field: "event", headerName: "Event", fex: 2.5 },
     { field: "site", headerName: "Site", fex: 2.5 },
-    { field: "eco_code", headerName: "ECO code", fex: 2.5 },{ field: 'actions', headerName: 'Actions', flex: 1, renderCell: (params) => {
+    { field: "eco_code", headerName: "ECO code", fex: 2.5 },
+    { field: 'actions', headerName: 'Actions', flex: 1, renderCell: (params) => {
         return (
           <Button
             onClick={async (e) => {
