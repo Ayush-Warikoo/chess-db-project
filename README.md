@@ -32,9 +32,10 @@
 ### Loading production data and running tests (test-production.sql)
 
 1. Download a sizeable pgn collection from https://www.ficsgames.org/download.html, use data spanning months or years.
-2. Drag the files in the Add Game UI on the front end and submit the files.
-3. Run `npm run test-prod-data`
-4. Look at the output and it should be similar to test-sample.out except have the production values
+2. Split the unzipped file by `awk -F '0\n'|'1\n' '/^Target/{fn=$2} !/^Target|^$/{print >> fn}' {FILENAME}`
+3. Drag the files in the Add Game UI on the front end and submit the files.
+4. Run `npm run test-prod-data`
+5. Look at the output and it should be similar to test-sample.out except have the production values
 
 ### Installing Stock Fish Engine
 
