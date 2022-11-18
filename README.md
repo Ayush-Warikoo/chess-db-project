@@ -33,7 +33,7 @@
 
 1. Download a sizeable pgn collection from https://www.ficsgames.org/download.html, use data spanning months or years.
 2. Split the unzipped file by running `npm run load-sample-data` and inputting the file path, it will then output all the pgn files.
-3. Drag the files in the Add Game UI on the front end and submit the files.
+3. Drag the numbered files from the backend into the Add Game UI on the front end and submit the files.
 4. Run `npm run test-prod-data`
 5. Look at the output and it should be similar to test-sample.out except have the production values
 
