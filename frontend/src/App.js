@@ -46,8 +46,8 @@ function App() {
                 <Router>
                     <Header setTheme={setTheme}/>
                     <Routes>
-                        <Route path="/" element={<ChessBoardPage />} />
-                        <Route path="/datatable" element={<DataTablePage />} />
+                        <Route path="/" element={<ChessBoardPage theme={theme}/>} />
+                        <Route path="/datatable" element={<DataTablePage theme={theme}/>} />
                         <Route path="/addgame" element={<AddGame />} />
                         <Route path="/profile/:name" element={<ProfilePage />} />
                     </Routes>

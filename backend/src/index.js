@@ -14,8 +14,7 @@ var engine1;
 
 
 async function initEngine() {
-    console.log(process.env.STOCK_FISH_ENG_PATH);
-    engine1 = new Engine("C:\\ProgramData\\stockfish_15_win_x64_avx2\\stockfish_15_win_x64_avx2\\stockfish_15_x64_avx2.exe");
+    engine1 = new Engine(process.env.STOCK_FISH_ENG_PATH);
     await engine1.init();
     await engine1.setoption('MultiPv', '4');
 }

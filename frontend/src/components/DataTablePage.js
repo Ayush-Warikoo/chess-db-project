@@ -12,38 +12,7 @@ import {
   Link as MuiLink,
 } from "@mui/material";
 
-const columns = [
-  { field: "id", headerName: "ID", flex: 1 },
-  { field: "date", headerName: "Date", flex: 2 },
-  {
-    field: "white_player",
-    headerName: "White",
-    fex: 2.5,
-    renderCell: ({ value }) => (
-      <MuiLink as={Link} to={`/profile/${value}`}>
-        {value}
-      </MuiLink>
-    ),
-  },
-  { field: "white_elo", headerName: "White Elo", flex: 1 },
-  {
-    field: "black_player",
-    headerName: "Black",
-    fex: 2.5,
-    renderCell: ({ value }) => (
-      <MuiLink as={Link} to={`/profile/${value}`}>
-        {value}
-      </MuiLink>
-    ),
-  },
-  { field: "black_elo", headerName: "Black Elo", flex: 1 },
-  { field: "result", headerName: "Result", flex: 1.5 },
-  { field: "event", headerName: "Event", fex: 2.5 },
-  { field: "site", headerName: "Site", fex: 2.5 },
-  { field: "eco_code", headerName: "ECO code", fex: 2.5 },
-];
-
-function DataTablePage() {
+function DataTablePage({ theme }) {
   const [rows, setRows] = useState([]);
   const [whitePlayer, setWhitePlayer] = useState("");
   const [blackPlayer, setBlackPlayer] = useState("");
@@ -51,6 +20,37 @@ function DataTablePage() {
   const [event, setEvent] = useState("");
   const [ecoCode, setEcoCode] = useState("");
   const [result, setResult] = useState("");
+
+  const columns = [
+    { field: "id", headerName: "ID", flex: 1 },
+    { field: "date", headerName: "Date", flex: 2 },
+    {
+      field: "white_player",
+      headerName: "White",
+      fex: 2.5,
+      renderCell: ({ value }) => (
+        <MuiLink as={Link} to={`/profile/${value}`} sx={{color: theme === 'light' ? '#1976d2' : '#90caf9'}}>
+          {value}
+        </MuiLink>
+      ),
+    },
+    { field: "white_elo", headerName: "White Elo", flex: 1 },
+    {
+      field: "black_player",
+      headerName: "Black",
+      fex: 2.5,
+      renderCell: ({ value }) => (
+        <MuiLink as={Link} to={`/profile/${value}`} sx={{color: theme === 'light' ? '#1976d2' : '#90caf9'}}>
+          {value}
+        </MuiLink>
+      ),
+    },
+    { field: "black_elo", headerName: "Black Elo", flex: 1 },
+    { field: "result", headerName: "Result", flex: 1.5 },
+    { field: "event", headerName: "Event", fex: 2.5 },
+    { field: "site", headerName: "Site", fex: 2.5 },
+    { field: "eco_code", headerName: "ECO code", fex: 2.5 },
+  ];
 
   useEffect(() => {
     async function fetchData() {
