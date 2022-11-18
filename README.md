@@ -31,7 +31,7 @@
 
 ### Loading production data and running tests (test-production.sql)
 
-1. Download a sizeable pgn collection from https://www.ficsgames.org/download.html, for proper data use spanning months or years.
+1. Download a sizeable pgn collection from https://www.ficsgames.org/download.html, use data spanning months or years.
 2. Drag the files in the Add Game UI on the front end and submit the files.
 3. Run `npm run test-prod-data`
 4. Look at the output and it should be similar to test-sample.out except have the production values
