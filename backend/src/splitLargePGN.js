@@ -6,7 +6,7 @@ const readline = require('readline').createInterface({
   });
 
 
-readline.question('File Path Input', async filePath => {
+readline.question('File Path Input: ', async filePath => {
 
     // read the file content
     const str = fs.readFileSync(filePath).toString();
