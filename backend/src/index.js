@@ -119,7 +119,8 @@ app.get("/api/games/:fen", async (req, res) => {
         JOIN games ON positions.game_id = games.id
         JOIN players AS white ON games.white_id = white.id
         JOIN players AS black ON games.black_id = black.id
-        WHERE fen = ?`,
+        WHERE fen = ?
+        LIMIT 20`,
         values: [fen],
         nestTables: true
     });

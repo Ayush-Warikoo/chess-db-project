@@ -58,10 +58,14 @@
 
 ## Features
 
+- Play a game on a chessboard, with the ability to undo moves, reset or flip the board
 - Get a list of all games that have reached a particular position by moving pieces on a chessboard
 - Get percentage of games that have ended in a draw, win, or loss from that position
 - Add games to the dataset by uploading a PGN file
+- Delete games from the dataset via the Data Table page
+- View and update player profiles via the Data Table page
 - Get a list of all games that meet a set of criteria (white player name, black player name, minimum elo, result, etc.)
+- Get the engine evaluation and stockfish 15 recommended moves for a given position
 
 ## Troubleshooting
 
