@@ -100,6 +100,16 @@ const loadSampleData = async () => {
 
      console.log("Selected by Black Victories:");
      console.log(formattedResults);
+  
+  const updatePlayerQuery = 'update players set profile_pic_url = ?, birth_date = ?, bio = ? where name = ?'
+  const updatePlayerResult = await query(updatePlayerQuery, [
+    'https://c8.alamy.com/comp/2GJ8N1M/oslo-20140506-magnus-carlsen-norwegian-world-champion-in-chess-foto-hannes-holmstrom-dn-tt-kod-3000-2GJ8N1M.jpg',
+    '1990-11-30',
+    'I am simply the best',
+    'mmjme'
+  ])
+  console.log("Update Player Test:");
+  console.log(updatePlayerResult)
 
   pool.end();
   console.log("Done loading sample data!");
