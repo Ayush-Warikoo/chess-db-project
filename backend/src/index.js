@@ -80,7 +80,7 @@ app.put("/players/:name", async (req, res) => {
 })
 
 app.post("/addGame", async (req, res) => {
-  const results = await addGame(sanitizeString(req.body.str));
+  const results = await addGame(req.body.str);
   res.send(results);
 });
 
@@ -97,7 +97,7 @@ app.get("/engineAnalysis/:fen", async (req, res) => {
 });
 
 app.post("/api/games/removeGame", async (req, res) => {
-    const id = sanitizeString(req.body.id);
+    const id = req.body.id;
     await query("delete from positions where game_id = ?", [
         id
     ]);

@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import * as ChessJS from 'chess.js';
 import { Chessboard } from 'react-chessboard';
-import { Button, List, ListItem, ListItemText, Typography } from '@mui/material';
+import { Button, Card, CardContent, List, ListItem, ListItemText, Typography } from '@mui/material';
 
 import { isPawnPromotion, switchColor, calculateWinrate } from './helper';
 import { WHITE } from './constants';
@@ -14,6 +14,8 @@ function ChessBoardPage({ theme }) {
     const [gameOver, setGameOver] = useState(false);
     const [samePositionGames, setSamePositionGames] = useState([]);
     const [winrate, setWinrate] = useState(0);
+    const [engineEval, setEngineEval] = useState(31);
+    const [engineMoves, setEngineMoves] = useState(["c2c4 c7c5", "g2g3 b8c6", "g1f3 g7g6", "f1g2 f8g7", "b1c3 g8f6", "d2d4 c6d4"]);
 
     function initializeState() {
         const Chess = typeof ChessJS === "function" ? ChessJS : ChessJS.Chess;
@@ -31,6 +33,23 @@ function ChessBoardPage({ theme }) {
         const result = await fetch(`http://localhost:5000/api/games/${encodeURIComponent(game.current.fen())}/winrate`);
         const data = await result.json();
         setWinrate(data);
+    }
+
+    async function getEngineEval() {
+        const result = await fetch(`http://localhost:5000/engineAnalysis/${encodeURIComponent(game.current.fen())}`);
+        const data = await result.json();
+        const halfMoves = data.pv?.split(" ");
+        const moves = [];
+        let offset = 0;
+        if (game.current.turn() === ChessJS.BLACK) {
+            moves.push(halfMoves[0]);
+            offset = 1;
+        }
+        for (let i = offset; i < 11; i += 2) {
+            moves.push(`${halfMoves[i]} ${halfMoves[i + 1]}`);
+        }
+        setEngineEval(data.score.value);
+        setEngineMoves(moves);
     }
 
     useEffect(() => {
@@ -52,6 +71,7 @@ function ChessBoardPage({ theme }) {
             getGameData();
             getWinrateData();
             checkGameStatus();
+            getEngineEval();
         }
     }
 
@@ -77,6 +97,8 @@ function ChessBoardPage({ theme }) {
         setFen(game.current.fen());
         getGameData();
         getWinrateData();
+        checkGameStatus();
+        getEngineEval();
     }
 
     function handleReset() {
@@ -84,12 +106,27 @@ function ChessBoardPage({ theme }) {
         setFen(game.current.fen());
         getGameData();
         getWinrateData();
+        checkGameStatus();
+        getEngineEval();
         setGameOver(false);
     }
 
     return (
         <div style={{ height: '100vh' }}>
             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '90%' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'left' }}>
+                    {/* Engine evaluation bar*/}
+                    <Typography variant="h6">
+                        {engineEval/100}
+                    </Typography>
+                    <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', width: '100%' }}>
+                        <div style={{ width: '40px', height: '500px', backgroundColor: 'white', borderRadius: '20px', border: `2px solid ${theme === 'light' ? 'black' : 'white'}`, marginRight: '20px' }}>
+                            <div style={{ width: `36px`, height: `${250 + engineEval*(-25/100)}px`, backgroundColor: 'black', borderRadius: '20px 20px 0px 0px' }}>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
                 <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'left' }}>
                     <Chessboard
                         id="humanVsHuman"
@@ -127,6 +164,19 @@ function ChessBoardPage({ theme }) {
                     </Button>
                 </div>
                 <div>
+                    <div style={{marginBottom: '10px'}}>
+                            <Typography variant="h6" component="h2"> Stockfish 15 Engine: </Typography>
+                            <Card style={{width: '400px'}}>
+                                <CardContent>
+                                    <Typography variant="body1" color="text.secondary">
+                                    {engineMoves.reduce((acc, move, ind) => {
+                                        const moveNum = Math.floor(game.current?.history()?.length/2) + ind + 1;
+                                        return acc + `${moveNum}. ` + move + ' ';
+                                    }, '')}
+                                    </Typography>
+                                </CardContent>
+                            </Card>
+                        </div>
                     <Typography variant="h6" component="h2">
                         Winrate % (W/B/D): {calculateWinrate(winrate).join(' / ')}
                     </Typography>
@@ -144,9 +194,7 @@ function ChessBoardPage({ theme }) {
                         }}
                     >
                         <li>
-                            {/* {console.log(samePositionGames)}
-                            {console.log(TEST_DATA)} */}
-                            {[...samePositionGames, ...TEST_DATA].map(({games, white, black}, index) => (
+                            {[...samePositionGames, ...TEST_DATA].map(({ games, white, black }, index) => (
                                 <ul key={`item-${index}`}>
                                     <ListItem
                                         sx={{
