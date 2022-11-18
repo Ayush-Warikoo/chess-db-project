@@ -1,8 +1,10 @@
-import { AppBar, Box, Toolbar, Typography } from '@mui/material';
+import { AppBar, Box, Toolbar, Typography, Switch } from '@mui/material';
+import DarkModeIcon from '@mui/icons-material/DarkMode';
+import LightModeIcon from '@mui/icons-material/LightMode';
 import React from 'react'
 import { Link } from 'react-router-dom';
 
-function Header() {
+function Header({ setTheme }) {
     return (
         <AppBar position="static">
             <Toolbar>
@@ -24,17 +26,24 @@ function Header() {
                             Data Table
                         </Typography>
                     </Link>
-                    <Link to="/opening" style={{ textDecoration: 'none', color: 'white' }}>
+                    {/* <Link to="/opening" style={{ textDecoration: 'none', color: 'white' }}>
                         <Typography variant="h5" component="div" sx={{ flexGrow: 1, paddingRight: '1rem' }}>
                             Opening Explorer
                         </Typography>
-                    </Link>
+                    </Link> */}
                     <Link to="/addgame" style={{ textDecoration: 'none', color: 'white' }}>
                         <Typography variant="h5" component="div" sx={{ flexGrow: 1, paddingRight: '1rem' }}>
                             Add Game
                         </Typography>
                     </Link>
                 </Box>
+                
+                <LightModeIcon />
+                <Switch
+                    onChange={() => setTheme((theme) => theme === 'light' ? 'dark' : 'light')}
+                />
+                <DarkModeIcon />
+                
             </Toolbar>
         </AppBar>
     )
