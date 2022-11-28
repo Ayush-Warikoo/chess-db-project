@@ -1,5 +1,5 @@
 const { pool, query } = require("./db.js");
-const { addGame } = require("./addGame.js");
+const { addSampleGame } = require("./addGame.js");
 const fs = require("fs");
 const path = require('path');
 
@@ -14,7 +14,7 @@ const loadSampleData = async () => {
 
   for (var i = 0; i < names.length; i++) {
     const buffer = fs.readFileSync("res/" + names[i]);
-    const results = await addGame(buffer.toString());
+    const results = await addSampleGame(buffer.toString());
   }
 
   const selectByFen = await query({
