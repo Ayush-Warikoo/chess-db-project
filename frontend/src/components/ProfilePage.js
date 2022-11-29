@@ -13,10 +13,11 @@ import {
 } from "@mui/material";
 import moment from "moment";
 import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
+import { toast, ToastContainer } from "react-toastify";
 
 const DEFAULT_PROFILE_PIC_URL = `https://st3.depositphotos.com/6672868/13701/v/600/depositphotos_137014128-stock-illustration-user-profile-icon.jpg`;
 
-const ProfilePage = () => {
+const ProfilePage = ({ theme }) => {
   const { name } = useParams();
   const [player, setPlayer] = useState(null);
   const [editing, setEditing] = useState(false);
@@ -128,6 +129,14 @@ const ProfilePage = () => {
               onClick={() => {
                 setEditing(false);
                 updatePlayer();
+                toast.success(`Successfully updated ${player.name}'s profile!`, {
+                  position: 'top-right',
+                  autoClose: 2000,
+                  closeOnClick: true,
+                  pauseOnHover: true,
+                  progress: undefined,
+                  theme,
+                });
               }}
               disabled={_.isEqual(player, modifiedPlayer)}
             >
@@ -169,6 +178,7 @@ const ProfilePage = () => {
           player.bio || "This player does not have a bio yet."
         )}
       </Box>
+      <ToastContainer />
     </Stack>
   );
 };

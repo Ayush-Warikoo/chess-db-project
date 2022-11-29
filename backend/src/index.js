@@ -79,7 +79,8 @@ app.put("/players/:name", async (req, res) => {
   }
 })
 
-app.post("/addGame", async (req, res) => {
+app.post("/api/addGame", async (req, res) => {
+  console.log(req.body.str);
   const results = await addGame(req.body.str);
   res.send(results);
 });
@@ -115,7 +116,7 @@ app.get("/test", (req, res) => {
 app.get("/api/games/:fen", async (req, res) => {
     const fen = sanitizeString(req.params.fen);
     const results = await query({
-        sql: `SELECT event, site, date, white_elo, black_elo, result, white.name, black.name FROM positions
+        sql: `SELECT event, site, date, white_elo, black_elo, result, next_move, white.name, black.name FROM positions
         JOIN games ON positions.game_id = games.id
         JOIN players AS white ON games.white_id = white.id
         JOIN players AS black ON games.black_id = black.id

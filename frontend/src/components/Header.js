@@ -40,7 +40,12 @@ function Header({ setTheme }) {
                 
                 <LightModeIcon />
                 <Switch
-                    onChange={() => setTheme((theme) => theme === 'light' ? 'dark' : 'light')}
+                    checked={localStorage.getItem('theme') === 'dark'}
+                    onChange={() => setTheme((theme) => {
+                      const newTheme = theme === 'light' ? 'dark' : 'light';
+                      localStorage.setItem('theme', newTheme);
+                      return newTheme;
+                    })}
                 />
                 <DarkModeIcon />
                 

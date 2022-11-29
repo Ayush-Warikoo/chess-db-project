@@ -19,4 +19,11 @@ function calculateWinrate(winrate) {
     return [whiteWinrate, blackWinrate, drawrate];
 }
 
-export { isPawnPromotion, switchColor, calculateWinrate };
+function calculateEvalBarPixels(engineEval) {
+    const max = 480;
+    const min = 0;
+    const pixels = 250 + engineEval*(-25/100);
+    return Math.min(Math.max(pixels, min), max);
+}
+
+export { isPawnPromotion, switchColor, calculateWinrate, calculateEvalBarPixels };

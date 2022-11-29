@@ -14,6 +14,7 @@ import {
   TextField,
   Link as MuiLink,
 } from "@mui/material";
+import { toast, ToastContainer } from "react-toastify";
 
 function DataTablePage({ theme }) {
   const [rows, setRows] = useState([]);
@@ -60,21 +61,26 @@ function DataTablePage({ theme }) {
                 e.stopPropagation();
                 async function deleteRow(id) {
                     const url = `http://localhost:5000/api/games/removeGame`
-                    await axios.post(url, {"id": id}).then(function (response) {
-                        console.log(response);
-                      }).then(res => {
-                        console.log(res)
-                      })
+                    await axios.post(url, {"id": id}).then(res => {
+                        console.log(res);
+                      });
                 }
                 await deleteRow(params.row.id);
                 e.stopPropagation(); // don't select this row after clicking
 
-                async function fetchData() {
-                    const res = await fetch(`http://localhost:5000/api/table?whitePlayer=${whitePlayer}&blackPlayer=${blackPlayer}&minElo=${minElo}&event=${event}&result=${result}`);
-                    const data = await res.json();
-                    setRows(data);
-                }
-                await fetchData();
+                // Update UI directly
+                const newRows = rows.filter((row) => row.id !== params.row.id);
+                setRows(newRows);
+
+              toast.success(`Game ${params.row.id} deleted successfully`, {
+                position: "top-right",
+                autoClose: 2000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                theme
+              });
+
             }}
             variant="contained"
           >
@@ -148,7 +154,7 @@ function DataTablePage({ theme }) {
       </div>
 
       {/* {console.log(rows)} */}
-      <div style={{ height: 800, width: "100%" }}>
+      <div style={{ height: 631, width: "100%" }}>
         <DataGrid
           rows={rows}
           columns={columns}
@@ -157,6 +163,7 @@ function DataTablePage({ theme }) {
           checkboxSelection
         />
       </div>
+      <ToastContainer />
     </Container>
   );
 }
