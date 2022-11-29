@@ -6,12 +6,8 @@ const addGame = async (req) => {
   var pgnList = [];
   var tagsList = [];
 
-  console.log(req);
-
   for (var i = 0; i < req.length; i++) {
-    console.log(parse(req[i]));
     const pgn = parse(req[i])[0];
-    console.log(pgn);
     const tags = pgn.tags;
     pgnList.push(pgn);
     tagsList.push(tags);
@@ -34,8 +30,6 @@ const addGame = async (req) => {
     "insert into players (name) values (?) ON DUPLICATE KEY UPDATE id=id;",
     whiteTags
   );
-
-  console.log(req);
 
   for (var i = 0; i < req.length; i++) {
     var whiteId = -1;

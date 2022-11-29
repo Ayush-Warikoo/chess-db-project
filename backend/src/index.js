@@ -80,7 +80,6 @@ app.put("/players/:name", async (req, res) => {
 })
 
 app.post("/api/addGame", async (req, res) => {
-  console.log(req.body.str);
   const results = await addGame(req.body.str);
   res.send(results);
 });
