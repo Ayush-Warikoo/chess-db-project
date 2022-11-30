@@ -57,7 +57,7 @@
 ## Features
 
 - Play a game on a chessboard, with the ability to undo moves, reset or flip the board
-- Get a list of all games that have reached a particular position by moving pieces on a chessboard
+- Get a list of all games that have reached a particular position, and their next moves
 - Get percentage of games that have ended in a draw, win, or loss from that position
 - Add games to the dataset by uploading a PGN file
 - Delete games from the dataset via the Data Table page

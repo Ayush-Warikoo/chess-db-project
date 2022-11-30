@@ -38,7 +38,7 @@ const lightTheme = createTheme({
 });
 
 function App() {
-    const [theme, setTheme] = useState('light');
+    const [theme, setTheme] = useState(localStorage.getItem('theme') || 'light');
     return (
         <LocalizationProvider dateAdapter={AdapterMoment}>
             <ThemeProvider theme={theme === 'light' ? lightTheme : darkTheme}>
@@ -48,8 +48,8 @@ function App() {
                     <Routes>
                         <Route path="/" element={<ChessBoardPage theme={theme}/>} />
                         <Route path="/datatable" element={<DataTablePage theme={theme}/>} />
-                        <Route path="/addgame" element={<AddGame />} />
-                        <Route path="/profile/:name" element={<ProfilePage />} />
+                        <Route path="/addgame" element={<AddGame theme={theme}/>} />
+                        <Route path="/profile/:name" element={<ProfilePage theme={theme}/>} />
                     </Routes>
                 </Router>
             </ThemeProvider>

@@ -14,13 +14,15 @@ const loadSampleData = async () => {
     .filter(item => !item.isDirectory())
     .map(item => item.name);
 
+  const fileList = [];
   for (var i = 0; i < names.length; i++) {
     const buffer = fs.readFileSync("res/sample/" + names[i]);
     const results = await addGame([buffer.toString()]);
   }
+  await addGame(fileList);
 
   const selectByFen = await query({
-    sql: `SELECT event, site, date, white_elo, black_elo, result, white.name, black.name FROM positions
+    sql: `SELECT event, site, date, white_elo, black_elo, result, next_move, white.name, black.name FROM positions
     JOIN games ON positions.game_id = games.id
     JOIN players AS white ON games.white_id = white.id
     JOIN players AS black ON games.black_id = black.id

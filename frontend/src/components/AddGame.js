@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useDropzone } from 'react-dropzone';
 import { Container } from '@mui/system';
 import { Button, Typography } from "@mui/material";
+import { toast, ToastContainer } from "react-toastify";
 
 const baseStyle = {
     flex: 1,
@@ -33,8 +34,8 @@ const rejectStyle = {
 };
 
 
-function AddGame() {
-    const [files, setFiles] = useState();
+function AddGame({ theme }) {
+    const [files, setFiles] = useState([]);
 
     const onDrop = useCallback((acceptedFiles) => {
         console.log(acceptedFiles);
@@ -107,10 +108,30 @@ function AddGame() {
     
         reader.readAsText(file);
       }
+
+      files.length > 0
+        ? toast.success(`Successfully added game(s)!`, {
+        position: 'top-right',
+        autoClose: 2000,
+        closeOnClick: true,
+        pauseOnHover: true,
+        progress: undefined,
+        theme,
+      })
+      : toast.error(`Please select a file!`, {
+        position: 'top-right',
+        autoClose: 2000,
+        closeOnClick: true,
+        pauseOnHover: true,
+        progress: undefined,
+        theme,
+      });
+      // acceptedFiles.splice(0, acceptedFiles.length);
+      // setFiles(acceptedFiles);
     }
   
     function sendFiles(fileTexts) {
-      const url = 'http://localhost:5000/addGame';
+      const url = 'http://localhost:5000/api/addGame';
       axios.post(url, {"str": fileTexts}).then(function (response) {
         console.log(response);
       })
@@ -125,9 +146,10 @@ function AddGame() {
     return (
         <div className="AddGame" style={{ marginTop: '20px' }}>
             <Container maxWidth="lg">
-                <Typography variant="h6" component="h2">
+                <Typography variant="h5" component="h2">
                     Add a game
                 </Typography>
+                <br />
                 <div {...getRootProps({ style })}>
                     <input {...getInputProps()} />
                     <p>Drag 'n' drop some files here, or click to select files</p>
@@ -139,9 +161,10 @@ function AddGame() {
                     color="primary"
                     style={{ margin: '10px 0px', padding: '10px' }}
                 >
-                    Submit Games
+                    Submit Game(s)
                 </Button>
             </Container>
+            <ToastContainer />
         </div>
     );
 }
