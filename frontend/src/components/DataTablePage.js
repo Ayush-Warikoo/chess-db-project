@@ -70,9 +70,11 @@ function DataTablePage({ theme }) {
                 e.stopPropagation(); // don't select this row after clicking
 
                 async function fetchData() {
-                    const res = await fetch(`http://localhost:5000/api/table?whitePlayer=${whitePlayer}&blackPlayer=${blackPlayer}&minElo=${minElo}&event=${event}&result=${result}`);
-                    const data = await res.json();
-                    setRows(data);
+                  const res = await fetch(
+                    `http://localhost:5000/api/table?whitePlayer=${whitePlayer}&blackPlayer=${blackPlayer}&minElo=${minElo}&event=${event}&ecoCode=${ecoCode}&result=${result}`
+                  );
+                  const data = await res.json();
+                  setRows(data);
                 }
                 await fetchData();
             }}

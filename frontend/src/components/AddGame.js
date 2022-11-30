@@ -62,7 +62,9 @@ function AddGame() {
     ]);
 
     function handleSubmit(event) {
+
       var fileTexts = []
+      var count = 0
       for (var file of files) {
         event.preventDefault()
   
@@ -70,9 +72,36 @@ function AddGame() {
     
         reader.onload = async function(event) {
           console.log(files.length)
-          fileTexts.push(event.target.result)
-          if (fileTexts.length === files.length) {
-            sendFiles(fileTexts)
+
+          let arr = event.target.result.split(/\-0\s/);
+
+
+            for (var i = 0; i < arr.length; i++) { 
+                var element = arr[i]
+     
+                if (element.charAt(element.length - 2) !== '-') {
+                    element += "-0"
+                }
+    
+                let inner = element.split(/\-1\s/)
+
+                for (var j = 0; j < inner.length; j++) { 
+                    var e = inner[j]
+    
+                    if (e.charAt(e.length - 2) !== '-') {
+                        e += "-1"
+                    }
+                    fileTexts.push(e)
+                }
+            }
+
+
+
+          count += 1
+        if (count === files.length) {
+            for (var i = 0; i < fileTexts.length; i = i + 20) { 
+                sendFiles(fileTexts.slice(i, i + 20))
+            }
           }
         };
     

@@ -7,29 +7,35 @@ const addGame = async (req) => {
     var tagsList = []
 
     for (var i = 0; i < req.length; i++) {
-        const pgn = parse(req[i])[0]
-        const tags = pgn.tags
-        pgnList.push(pgn)
-        tagsList.push(tags)
+        try {
+            const pgn = parse(req[i])[0]
+            if (pgn) {
+                const tags = pgn.tags
+                pgnList.push(pgn)
+                tagsList.push(tags)
+            }
+        } catch (e) {
+            return
+        }
     }
 
     var blackTags = []
     var whiteTags = []
 
-    for (var i = 0; i < req.length; i++) {
-        blackTags[i] = tagsList[i].Black
-        whiteTags[i] = tagsList[i].White
+    for (var i = 0; i < pgnList.length; i++) {
+        blackTags[i] = [tagsList[i].Black]
+        whiteTags[i] = [tagsList[i].White]
     }
 
-    await query("insert into players (name) values (?) ON DUPLICATE KEY UPDATE id=id;", blackTags);
-
-    await query("insert into players (name) values (?) ON DUPLICATE KEY UPDATE id=id;", whiteTags);
-
-    for (var i = 0; i < req.length; i++) {
+    for (var i = 0; i < pgnList.length; i++) {
         var whiteId = -1
         var blackId = -1
         const pgn = pgnList[i]
         const tags = pgn.tags
+
+        await query("insert into players (name) values (?) ON DUPLICATE KEY UPDATE id=id;", blackTags[i]);
+
+        await query("insert into players (name) values (?) ON DUPLICATE KEY UPDATE id=id;", whiteTags[i]);
 
         await query("select id from players where name=(?)", blackTags[i]).then(function(results){
             blackId = results[0].id
