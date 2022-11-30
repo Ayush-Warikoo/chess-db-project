@@ -22,13 +22,13 @@ const addGame = async (req) => {
   }
 
   await query(
-    "insert into players (name) values (?) ON DUPLICATE KEY UPDATE id=id;",
-    blackTags
+    "insert into players (name) values ? ON DUPLICATE KEY UPDATE id=id;",
+    [blackTags.map((tag) => [tag])]
   );
 
   await query(
-    "insert into players (name) values (?) ON DUPLICATE KEY UPDATE id=id;",
-    whiteTags
+    "insert into players (name) values ? ON DUPLICATE KEY UPDATE id=id;",
+    [whiteTags.map((tag) => [tag])]
   );
 
   for (var i = 0; i < req.length; i++) {
