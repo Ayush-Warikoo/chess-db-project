@@ -9,7 +9,14 @@ import {
   TableCell,
   TableBody,
   TableContainer,
+  IconButton,
 } from "@mui/material";
+import {
+  FirstPage as FirstPageIcon,
+  KeyboardArrowLeft as PrevPageIcon,
+  KeyboardArrowRight as NextPageIcon,
+  LastPage as LastPageIcon,
+} from "@mui/icons-material";
 import { Chess } from "chess.js";
 import { Chessboard } from "react-chessboard";
 import axios from "axios";
@@ -30,28 +37,28 @@ const PreviewGameModal = ({ theme, previewGame, onClose }) => {
   }, [previewGame]);
 
   useEffect(() => {
-    const posIdx = positions.findIndex(
+    const position = positions.find(
       (pos) => pos.move_number === selectedMoveNumber
     );
-    if (posIdx !== -1 && posIdx < positions.length - 1) {
-      setGame(new Chess(positions[posIdx + 1].fen));
+    if (position) {
+      setGame(new Chess(position.fen));
     }
-  }, [selectedMoveNumber]);
+  }, [selectedMoveNumber, positions]);
 
   const goPrevMove = () =>
     setSelectedMoveNumber((prevSelectedMoveNumber) =>
-      Math.max(-1, prevSelectedMoveNumber - 1)
+      Math.max(0, prevSelectedMoveNumber - 1)
     );
 
   const goNextMove = () =>
     setSelectedMoveNumber((prevSelectedMoveNumber) =>
-      Math.min(positions.length, prevSelectedMoveNumber + 1)
+      Math.min(positions.length - 1, prevSelectedMoveNumber + 1)
     );
 
   const handleKeydown = (e) => {
-    if (e.key == "ArrowLeft") {
+    if (e.key === "ArrowLeft") {
       goPrevMove();
-    } else if (e.key == "ArrowRight") {
+    } else if (e.key === "ArrowRight") {
       goNextMove();
     }
   };
@@ -64,8 +71,9 @@ const PreviewGameModal = ({ theme, previewGame, onClose }) => {
   });
 
   const movePairs = [];
-  for (let i = 0; i < positions.length; i += 2) {
-    movePairs.push(positions.slice(i, i + 2));
+  const positionsSkipFirst = positions.slice(1, positions.length);
+  for (let i = 0; i < positionsSkipFirst.length; i += 2) {
+    movePairs.push(positionsSkipFirst.slice(i, i + 2));
   }
 
   const moveTableCell = (position) => {
@@ -87,7 +95,7 @@ const PreviewGameModal = ({ theme, previewGame, onClose }) => {
           setSelectedMoveNumber(position.move_number);
         }}
       >
-        {position.next_move}
+        {position.prev_move}
       </TableCell>
     );
   };
@@ -107,7 +115,12 @@ const PreviewGameModal = ({ theme, previewGame, onClose }) => {
             arePiecesDraggable={false}
             boardWidth={450}
           />
-          <Box>
+          <Box
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+            flexDirection="column"
+          >
             <TableContainer sx={{ maxHeight: 450, minWidth: 200 }}>
               <Table>
                 <TableBody>
@@ -123,6 +136,32 @@ const PreviewGameModal = ({ theme, previewGame, onClose }) => {
                 </TableBody>
               </Table>
             </TableContainer>
+            <Box>
+              <IconButton
+                onClick={() => setSelectedMoveNumber(0)}
+                disabled={selectedMoveNumber === 0}
+              >
+                <FirstPageIcon />
+              </IconButton>
+              <IconButton
+                onClick={goPrevMove}
+                disabled={selectedMoveNumber === 0}
+              >
+                <PrevPageIcon />
+              </IconButton>
+              <IconButton
+                onClick={goNextMove}
+                disabled={selectedMoveNumber === positions.length - 1}
+              >
+                <NextPageIcon />
+              </IconButton>
+              <IconButton
+                onClick={() => setSelectedMoveNumber(positions.length - 1)}
+                disabled={selectedMoveNumber === positions.length - 1}
+              >
+                <LastPageIcon />
+              </IconButton>
+            </Box>
           </Box>
         </Stack>
       </Box>
