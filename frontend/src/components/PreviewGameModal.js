@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
+import moment from "moment";
 import {
   Box,
   Stack,
   Dialog,
-  DialogTitle,
+  Typography,
   Table,
   TableRow,
   TableCell,
@@ -16,6 +17,7 @@ import {
   KeyboardArrowLeft as PrevPageIcon,
   KeyboardArrowRight as NextPageIcon,
   LastPage as LastPageIcon,
+  Circle as CircleIcon,
 } from "@mui/icons-material";
 import { Chess } from "chess.js";
 import { Chessboard } from "react-chessboard";
@@ -99,70 +101,122 @@ const PreviewGameModal = ({ theme, previewGame, onClose }) => {
       </TableCell>
     );
   };
-
+  console.log(previewGame);
   return (
     <Dialog
       onClose={onClose}
       open={previewGame !== null}
       fullWidth
       maxWidth="md"
+      sx={{
+        minHeight: 800,
+      }}
     >
       <Box padding={2} display="flex" justifyContent="center">
-        <Stack direction="row" spacing={2}>
-          <Chessboard
-            id="BasicBoard"
-            position={game.fen()}
-            arePiecesDraggable={false}
-            boardWidth={450}
-          />
-          <Box
-            display="flex"
-            justifyContent="center"
-            alignItems="center"
-            flexDirection="column"
-          >
-            <TableContainer sx={{ maxHeight: 450, minWidth: 200 }}>
-              <Table>
-                <TableBody>
-                  {movePairs.map((pair, idx) => {
-                    return (
-                      <TableRow key={pair[0].fen}>
-                        <TableCell>{idx + 1}</TableCell>
-                        {moveTableCell(pair[0])}
-                        {pair[1] && moveTableCell(pair[1])}
-                      </TableRow>
-                    );
-                  })}
-                </TableBody>
-              </Table>
-            </TableContainer>
-            <Box>
-              <IconButton
-                onClick={() => setSelectedMoveNumber(0)}
-                disabled={selectedMoveNumber === 0}
-              >
-                <FirstPageIcon />
-              </IconButton>
-              <IconButton
-                onClick={goPrevMove}
-                disabled={selectedMoveNumber === 0}
-              >
-                <PrevPageIcon />
-              </IconButton>
-              <IconButton
-                onClick={goNextMove}
-                disabled={selectedMoveNumber === positions.length - 1}
-              >
-                <NextPageIcon />
-              </IconButton>
-              <IconButton
-                onClick={() => setSelectedMoveNumber(positions.length - 1)}
-                disabled={selectedMoveNumber === positions.length - 1}
-              >
-                <LastPageIcon />
-              </IconButton>
-            </Box>
+        <Stack direction="column" spacing={2}>
+          <Box>
+            {previewGame && (
+              <Typography variant="h5">
+                {previewGame.event}
+                <Typography variant="subtitle1">
+                  {moment(previewGame.date).format("dddd, MMMM Do YYYY")}
+                </Typography>
+              </Typography>
+            )}
           </Box>
+          <Stack direction="row" spacing={2}>
+            <Box>
+              {previewGame && (
+                <Typography
+                  mb={1}
+                  variant="h6"
+                  display="flex"
+                  alignItems="center"
+                >
+                  <CircleIcon sx={{ color: "black" }} />
+                  {`${previewGame.black_player} (${previewGame.black_elo}) - ${
+                    previewGame.result === "white"
+                      ? "0"
+                      : previewGame.result === "black"
+                      ? "1"
+                      : "1/2"
+                  }`}
+                </Typography>
+              )}
+              <Chessboard
+                id="BasicBoard"
+                position={game.fen()}
+                arePiecesDraggable={false}
+                boardWidth={450}
+              />
+              {previewGame && (
+                <Typography
+                  mt={1}
+                  variant="h6"
+                  display="flex"
+                  alignItems="center"
+                >
+                  <CircleIcon sx={{ color: "white" }} />
+                  {`${previewGame.white_player} (${previewGame.white_elo}) - ${
+                    previewGame.result === "white"
+                      ? "1"
+                      : previewGame.result === "black"
+                      ? "0"
+                      : "1/2"
+                  }`}
+                </Typography>
+              )}
+            </Box>
+
+            <Box
+              display="flex"
+              justifyContent="center"
+              alignItems="center"
+              flexDirection="column"
+            >
+              <TableContainer sx={{ maxHeight: 450, minWidth: 200 }}>
+                <Table>
+                  <TableBody>
+                    {movePairs.map((pair, idx) => {
+                      return (
+                        <TableRow key={pair[0].fen}>
+                          <TableCell>{idx + 1}</TableCell>
+                          {moveTableCell(pair[0])}
+                          {pair[1] && moveTableCell(pair[1])}
+                        </TableRow>
+                      );
+                    })}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+              <Box>
+                <IconButton
+                  onClick={() => setSelectedMoveNumber(0)}
+                  disabled={selectedMoveNumber === 0}
+                >
+                  <FirstPageIcon />
+                </IconButton>
+                <IconButton
+                  onClick={goPrevMove}
+                  disabled={selectedMoveNumber === 0}
+                >
+                  <PrevPageIcon />
+                </IconButton>
+                <IconButton
+                  onClick={goNextMove}
+                  disabled={selectedMoveNumber === positions.length - 1}
+                >
+                  <NextPageIcon />
+                </IconButton>
+                <IconButton
+                  onClick={() => setSelectedMoveNumber(positions.length - 1)}
+                  disabled={selectedMoveNumber === positions.length - 1}
+                >
+                  <LastPageIcon />
+                </IconButton>
+              </Box>
+            </Box>
+          </Stack>
         </Stack>
       </Box>
     </Dialog>
