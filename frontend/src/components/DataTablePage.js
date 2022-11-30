@@ -127,6 +127,7 @@ function DataTablePage({ theme }) {
   return (
     <Container maxWidth="lg">
       <PreviewGameModal
+        theme={theme}
         previewGame={previewGame}
         onClose={() => setPreviewGame(null)}
       />

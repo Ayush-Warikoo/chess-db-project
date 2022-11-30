@@ -14,9 +14,9 @@ import { Chess } from "chess.js";
 import { Chessboard } from "react-chessboard";
 import axios from "axios";
 
-const PreviewGameModal = ({ previewGame, onClose }) => {
+const PreviewGameModal = ({ theme, previewGame, onClose }) => {
   const [game, setGame] = useState(new Chess());
-  const [selectedMoveNumber, setSelectedMoveNumber] = useState(null);
+  const [selectedMoveNumber, setSelectedMoveNumber] = useState(-1);
   const [positions, setPositions] = useState([]);
   useEffect(() => {
     const fetchPositions = async () => {
@@ -29,11 +29,69 @@ const PreviewGameModal = ({ previewGame, onClose }) => {
     }
   }, [previewGame]);
 
+  useEffect(() => {
+    const posIdx = positions.findIndex(
+      (pos) => pos.move_number === selectedMoveNumber
+    );
+    if (posIdx !== -1 && posIdx < positions.length - 1) {
+      setGame(new Chess(positions[posIdx + 1].fen));
+    }
+  }, [selectedMoveNumber]);
+
+  const goPrevMove = () =>
+    setSelectedMoveNumber((prevSelectedMoveNumber) =>
+      Math.max(-1, prevSelectedMoveNumber - 1)
+    );
+
+  const goNextMove = () =>
+    setSelectedMoveNumber((prevSelectedMoveNumber) =>
+      Math.min(positions.length, prevSelectedMoveNumber + 1)
+    );
+
+  const handleKeydown = (e) => {
+    if (e.key == "ArrowLeft") {
+      goPrevMove();
+    } else if (e.key == "ArrowRight") {
+      goNextMove();
+    }
+  };
+  useEffect(() => {
+    document.addEventListener("keydown", handleKeydown);
+
+    return () => {
+      document.removeEventListener("keydown", handleKeydown);
+    };
+  });
+
   const movePairs = [];
   for (let i = 0; i < positions.length; i += 2) {
     movePairs.push(positions.slice(i, i + 2));
   }
-  console.log(movePairs);
+
+  const moveTableCell = (position) => {
+    const highlightedColor =
+      theme === "light" ? "rgba(0, 0, 0, 0.04)" : "rgba(255, 255, 255, 0.08)";
+    const cellHoverStyle = {
+      "&:hover": {
+        backgroundColor: highlightedColor,
+        cursor: "pointer",
+      },
+    };
+    if (position.move_number === selectedMoveNumber) {
+      cellHoverStyle.backgroundColor = highlightedColor;
+    }
+    return (
+      <TableCell
+        sx={cellHoverStyle}
+        onClick={() => {
+          setSelectedMoveNumber(position.move_number);
+        }}
+      >
+        {position.next_move}
+      </TableCell>
+    );
+  };
+
   return (
     <Dialog
       onClose={onClose}
@@ -57,25 +115,11 @@ const PreviewGameModal = ({ previewGame, onClose }) => {
                     return (
                       <TableRow key={pair[0].fen}>
                         <TableCell>{idx + 1}</TableCell>
-                        <TableCell
-                          hover
-                          // sx={{
-                          //   "&:hover": {
-                          //     background: "yellow",
-                          //   },
-                          // }}
-                        >
-                          {pair[0].next_move}
-                        </TableCell>
-                        {pair[1] && <TableCell>{pair[1].next_move}</TableCell>}
+                        {moveTableCell(pair[0])}
+                        {pair[1] && moveTableCell(pair[1])}
                       </TableRow>
                     );
                   })}
-                  {/* <TableRow>
-                  <TableCell>1.</TableCell>
-                  <TableCell>e4</TableCell>
-                  <TableCell>e5</TableCell>
-                </TableRow> */}
                 </TableBody>
               </Table>
             </TableContainer>
