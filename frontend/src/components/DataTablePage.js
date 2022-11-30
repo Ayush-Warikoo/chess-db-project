@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { DataGrid } from "@mui/x-data-grid";
 import { Link } from "react-router-dom";
-import axios from 'axios';
+import axios from "axios";
 
-import { Button } from '@mui/material';
+import { Button } from "@mui/material";
 
 import {
   Container,
@@ -13,8 +13,10 @@ import {
   Select,
   TextField,
   Link as MuiLink,
+  Stack,
 } from "@mui/material";
 import { toast, ToastContainer } from "react-toastify";
+import PreviewGameModal from "./PreviewGameModal";
 
 function DataTablePage({ theme }) {
   const [rows, setRows] = useState([]);
@@ -24,6 +26,7 @@ function DataTablePage({ theme }) {
   const [event, setEvent] = useState("");
   const [ecoCode, setEcoCode] = useState("");
   const [result, setResult] = useState("");
+  const [previewGame, setPreviewGame] = useState(null);
 
   const columns = [
     { field: "id", headerName: "ID", flex: 1 },
@@ -33,7 +36,11 @@ function DataTablePage({ theme }) {
       headerName: "White",
       fex: 2.5,
       renderCell: ({ value }) => (
-        <MuiLink as={Link} to={`/profile/${value}`} sx={{color: theme === 'light' ? '#1976d2' : '#90caf9'}}>
+        <MuiLink
+          as={Link}
+          to={`/profile/${value}`}
+          sx={{ color: theme === "light" ? "#1976d2" : "#90caf9" }}
+        >
           {value}
         </MuiLink>
       ),
@@ -44,26 +51,41 @@ function DataTablePage({ theme }) {
       headerName: "Black",
       fex: 2.5,
       renderCell: ({ value }) => (
-        <MuiLink as={Link} to={`/profile/${value}`} sx={{color: theme === 'light' ? '#1976d2' : '#90caf9'}}>
+        <MuiLink
+          as={Link}
+          to={`/profile/${value}`}
+          sx={{ color: theme === "light" ? "#1976d2" : "#90caf9" }}
+        >
           {value}
         </MuiLink>
       ),
     },
     { field: "black_elo", headerName: "Black Elo", flex: 1 },
     { field: "result", headerName: "Result", flex: 1.5 },
-    { field: "event", headerName: "Event", fex: 2.5 },
-    { field: "site", headerName: "Site", fex: 2.5 },
-    { field: "eco_code", headerName: "ECO code", fex: 2.5 },
-    { field: 'actions', headerName: 'Actions', flex: 1, renderCell: (params) => {
+    { field: "event", headerName: "Event", flex: 2.5 },
+    { field: "site", headerName: "Site", flex: 2.5 },
+    { field: "eco_code", headerName: "ECO code", flex: 1 },
+    {
+      field: "actions",
+      headerName: "Actions",
+      flex: 4,
+      renderCell: (params) => {
         return (
-          <Button
-            onClick={async (e) => {
+          <Stack direction="row" spacing={1}>
+            <Button
+              variant="contained"
+              onClick={() => setPreviewGame(params.row)}
+            >
+              Preview
+            </Button>
+            <Button
+              onClick={async (e) => {
                 e.stopPropagation();
                 async function deleteRow(id) {
-                    const url = `http://localhost:5000/api/games/removeGame`
-                    await axios.post(url, {"id": id}).then(res => {
-                        console.log(res);
-                      });
+                  const url = `http://localhost:5000/api/games/removeGame`;
+                  await axios.post(url, { id: id }).then((res) => {
+                    console.log(res);
+                  });
                 }
                 await deleteRow(params.row.id);
                 e.stopPropagation(); // don't select this row after clicking
@@ -72,22 +94,23 @@ function DataTablePage({ theme }) {
                 const newRows = rows.filter((row) => row.id !== params.row.id);
                 setRows(newRows);
 
-              toast.success(`Game ${params.row.id} deleted successfully`, {
-                position: "top-right",
-                autoClose: 2000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                theme
-              });
-
-            }}
-            variant="contained"
-          >
-            Delete
-          </Button>
+                toast.success(`Game ${params.row.id} deleted successfully`, {
+                  position: "top-right",
+                  autoClose: 2000,
+                  hideProgressBar: false,
+                  closeOnClick: true,
+                  pauseOnHover: true,
+                  theme,
+                });
+              }}
+              variant="contained"
+            >
+              Delete
+            </Button>
+          </Stack>
         );
-      } }
+      },
+    },
   ];
 
   useEffect(() => {
@@ -103,6 +126,10 @@ function DataTablePage({ theme }) {
 
   return (
     <Container maxWidth="lg">
+      <PreviewGameModal
+        previewGame={previewGame}
+        onClose={() => setPreviewGame(null)}
+      />
       {/* create toolbar to filter data */}
       <div>
         <br />
