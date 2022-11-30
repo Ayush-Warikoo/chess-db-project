@@ -31,8 +31,8 @@
 
 ### Loading production data and running tests (test-production.sql)
 
-1. The production data was a month collection of games from https://www.ficsgames.org/download.html and is found in res/production
-2. Run `npm run test-prod-data`, note this may take a while to load all of the production data
+1. The production data is a months collection of games from https://www.ficsgames.org/download.html and is found in res/production
+2. Run `npm run test-prod-data`, note this may take a while to insert all of the production data, the actual processing is quick
 3. Compare the output to test-production.out
 
 ### Installing Stock Fish Engine
