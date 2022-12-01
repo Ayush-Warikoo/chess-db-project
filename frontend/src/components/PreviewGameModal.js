@@ -25,7 +25,7 @@ import axios from "axios";
 
 const PreviewGameModal = ({ theme, previewGame, onClose }) => {
   const [game, setGame] = useState(new Chess());
-  const [selectedMoveNumber, setSelectedMoveNumber] = useState(-1);
+  const [selectedMoveNumber, setSelectedMoveNumber] = useState(0);
   const [positions, setPositions] = useState([]);
   useEffect(() => {
     const fetchPositions = async () => {
@@ -104,7 +104,12 @@ const PreviewGameModal = ({ theme, previewGame, onClose }) => {
   console.log(previewGame);
   return (
     <Dialog
-      onClose={onClose}
+      onClose={() => {
+        setGame(new Chess());
+        setSelectedMoveNumber(0);
+        setPositions([]);
+        onClose();
+      }}
       open={previewGame !== null}
       fullWidth
       maxWidth="md"
