@@ -27,21 +27,16 @@ const addGame = async (req) => {
     whiteTags[i] = tagsList[i].White;
   }
 
-  await query(
-    "insert into players (name) values ? ON DUPLICATE KEY UPDATE id=id;",
-    [blackTags.map((tag) => [tag])]
-  );
-
-  await query(
-    "insert into players (name) values ? ON DUPLICATE KEY UPDATE id=id;",
-    [whiteTags.map((tag) => [tag])]
-  );
 
   for (var i = 0; i < req.length; i++) {
     var whiteId = -1;
     var blackId = -1;
     const pgn = pgnList[i];
     const tags = pgn.tags;
+
+    await query("insert into players (name) values (?) ON DUPLICATE KEY UPDATE id=id;", blackTags[i]);
+
+    await query("insert into players (name) values (?) ON DUPLICATE KEY UPDATE id=id;", whiteTags[i]);
 
     await query("select id from players where name=(?)", blackTags[i]).then(
       function (results) {
