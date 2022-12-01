@@ -6,18 +6,17 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 import { isPawnPromotion, switchColor, calculateWinrate, calculateEvalBarPixels } from './helper';
-import { WHITE } from './constants';
+import { BLACK, WHITE } from './constants';
 
 function ChessBoardPage({ theme }) {
     const game = useRef();
-    const [playerTurn, setPlayerTurn] = useState(WHITE);
     const [fen, setFen] = useState(null);
     const [orientation, setOrientation] = useState('white');
     const [gameOver, setGameOver] = useState(false);
     const [samePositionGames, setSamePositionGames] = useState([]);
     const [winrate, setWinrate] = useState(0);
-    const [engineEval, setEngineEval] = useState(31);
-    const [engineMoves, setEngineMoves] = useState(["c2c4 c7c5", "g2g3 b8c6", "g1f3 g7g6", "f1g2 f8g7", "b1c3 g8f6", "d2d4 c6d4"]);
+    const [engineEval, setEngineEval] = useState(0);
+    const [engineMoves, setEngineMoves] = useState([]);
 
     function initializeState() {
         const Chess = typeof ChessJS === "function" ? ChessJS : ChessJS.Chess;
@@ -28,7 +27,6 @@ function ChessBoardPage({ theme }) {
     async function getGameData() {
         const result = await fetch(`http://localhost:5000/api/games/${encodeURIComponent(game.current.fen())}`);
         const data = await result.json();
-        console.log(data);
         setSamePositionGames(data);
     }
 
@@ -41,18 +39,16 @@ function ChessBoardPage({ theme }) {
     async function getEngineEval() {
         const result = await fetch(`http://localhost:5000/engineAnalysis/${encodeURIComponent(game.current.fen())}`);
         const data = await result.json();
-        const halfMoves = data.pv?.split(" ");
-        const moves = [data.pv];
-        let mult = 1;
-        if(playerTurn === WHITE) mult = -1;
-        setEngineEval(data.score.value * mult);
-        setEngineMoves(moves);
+        if(game.current?.turn() === BLACK) data.score.value *= -1;
+        setEngineEval(data.score.value);
+        setEngineMoves(data.pv);
     }
 
     useEffect(() => {
         initializeState();
         getGameData();
         getWinrateData();
+        getEngineEval();
     }, []);
 
     function handleMove(move) {
@@ -61,11 +57,10 @@ function ChessBoardPage({ theme }) {
             console.log('promotion');
             move.promotion = 'q';
         }
-        // console.log(game.current._turn, piece.color)
+        // console.log(game.current?.turn(), piece.color)
         const isValidMove = game.current.move(move);
         if (isValidMove) {
             setFen(game.current.fen());
-            setPlayerTurn(game.current._turn);
             getGameData();
             getWinrateData();
             checkGameStatus();
@@ -135,7 +130,7 @@ function ChessBoardPage({ theme }) {
                     </Typography>
                     <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', width: '100%' }}>
                         <div style={{ width: '40px', height: '500px', backgroundColor: engineEval > -1000 ? 'white' : 'black', borderRadius: '20px', border: `2px solid ${theme === 'light' ? 'black' : 'white'}`, marginRight: '20px' }}>
-                            <div style={{ width: `36px`, height: `${calculateEvalBarPixels(engineEval, playerTurn)}px`, backgroundColor: 'black', borderRadius: '20px 20px 0px 0px' }}>
+                            <div style={{ width: `36px`, height: `${calculateEvalBarPixels(engineEval)}px`, backgroundColor: 'black', borderRadius: '20px 20px 0px 0px' }}>
                             </div>
                         </div>
                     </div>
@@ -183,10 +178,7 @@ function ChessBoardPage({ theme }) {
                             <Card style={{width: '400px'}}>
                                 <CardContent>
                                     <Typography variant="body1" color="text.secondary">
-                                    {engineMoves.reduce((acc, move, ind) => {
-                                        const moveNum = Math.floor(game.current?.history()?.length/2) + ind + 1;
-                                        return acc + `${moveNum}. ` + move + ' ';
-                                    }, '')}
+                                        {engineMoves}
                                     </Typography>
                                 </CardContent>
                             </Card>
