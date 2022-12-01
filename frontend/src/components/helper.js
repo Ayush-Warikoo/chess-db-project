@@ -19,7 +19,7 @@ function calculateWinrate(winrate) {
     return [whiteWinrate, blackWinrate, drawrate];
 }
 
-function calculateEvalBarPixels(engineEval) {
+function calculateEvalBarPixels(engineEval, playerTurn) {
     const max = 480;
     const min = 0;
     const pixels = 250 + engineEval*(-25/100);

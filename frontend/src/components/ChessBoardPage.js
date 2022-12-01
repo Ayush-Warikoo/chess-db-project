@@ -10,6 +10,7 @@ import { WHITE } from './constants';
 
 function ChessBoardPage({ theme }) {
     const game = useRef();
+    const [playerTurn, setPlayerTurn] = useState(WHITE);
     const [fen, setFen] = useState(null);
     const [orientation, setOrientation] = useState('white');
     const [gameOver, setGameOver] = useState(false);
@@ -42,7 +43,9 @@ function ChessBoardPage({ theme }) {
         const data = await result.json();
         const halfMoves = data.pv?.split(" ");
         const moves = [data.pv];
-        setEngineEval(data.score.value);
+        let mult = 1;
+        if(playerTurn === WHITE) mult = -1;
+        setEngineEval(data.score.value * mult);
         setEngineMoves(moves);
     }
 
@@ -62,6 +65,7 @@ function ChessBoardPage({ theme }) {
         const isValidMove = game.current.move(move);
         if (isValidMove) {
             setFen(game.current.fen());
+            setPlayerTurn(game.current._turn);
             getGameData();
             getWinrateData();
             checkGameStatus();
@@ -131,7 +135,7 @@ function ChessBoardPage({ theme }) {
                     </Typography>
                     <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', width: '100%' }}>
                         <div style={{ width: '40px', height: '500px', backgroundColor: engineEval > -1000 ? 'white' : 'black', borderRadius: '20px', border: `2px solid ${theme === 'light' ? 'black' : 'white'}`, marginRight: '20px' }}>
-                            <div style={{ width: `36px`, height: `${calculateEvalBarPixels(engineEval)}px`, backgroundColor: 'black', borderRadius: '20px 20px 0px 0px' }}>
+                            <div style={{ width: `36px`, height: `${calculateEvalBarPixels(engineEval, playerTurn)}px`, backgroundColor: 'black', borderRadius: '20px 20px 0px 0px' }}>
                             </div>
                         </div>
                     </div>

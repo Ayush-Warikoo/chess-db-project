@@ -91,16 +91,16 @@ app.get("/engineAnalysis/:fen", async (req, res) => {
         let ret = await engine1.isready();
         await engine1.position(sanitizeString(req.params.fen));
         const result = await engine1.go({depth: 15});
-        console.log("ASDASD");
         console.log(result.bestmove);
         let resVal;
+        let maxCenti = -9999;
         for(let i = 1; i < result.info.length; i++){
             console.log(result.info.at(i));
-            if(result.info.at(i).pv && result.info.at(i).pv.split(" ")[0] == result.bestmove) {
+            if(result.info.at(i).pv && result.info.at(i).pv.split(" ")[0] == result.bestmove && result.info.at(i).score.value >= maxCenti) {
                 resVal = result.info.at(i);
+                maxCenti = result.info.at(i).score.value;
             }
         }
-        resVal['pv'] = result.bestmove;
         console.log(resVal);
         res.status(200).send(resVal);
     } catch (e) {
