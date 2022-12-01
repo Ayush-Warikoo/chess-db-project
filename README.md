@@ -31,11 +31,9 @@
 
 ### Loading production data and running tests (test-production.sql)
 
-1. Download a sizeable pgn collection from https://www.ficsgames.org/download.html, use data spanning months or years.
-2. Split the unzipped file by running `npm run split-pgn-data` and inputting the file path, it will then output all the pgn files.
-3. Drag the numbered files from the backend into the Add Game UI on the front end and submit the files.
-4. Run `npm run test-prod-data`
-5. Look at the output and it should be similar to test-sample.out except have the production values
+1. The production data is a months collection of games from https://www.ficsgames.org/download.html and is found in res/production
+2. Run `npm run test-prod-data`, note this may take a while to insert all of the production data, the actual processing is quick
+3. Compare the output to test-production.out
 
 ### Installing Stock Fish Engine
 
@@ -54,7 +52,6 @@
     - Install dependencies by running `npm install`
     - Run `npm start`
 3. Navigate to `http://localhost:3000/` to view the web application
-
 
 
 ## Features
