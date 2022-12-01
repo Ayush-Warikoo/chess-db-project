@@ -27,7 +27,7 @@ app.use(cors(corsOptions));
 
 function sanitizeString(queryString) {
   let escapedString = escape(queryString);
-  console.log(escapedString);
+  // console.log(escapedString);
   return escapedString;
 }
 
@@ -91,11 +91,11 @@ app.get("/engineAnalysis/:fen", async (req, res) => {
     let ret = await engine1.isready();
     await engine1.position(sanitizeString(req.params.fen));
     const result = await engine1.go({ depth: 15 });
-    console.log(result.bestmove);
+    // console.log(result.bestmove);
     let resVal;
     let maxCenti = -9999;
     for (let i = 1; i < result.info.length; i++) {
-      console.log(result.info.at(i));
+      // console.log(result.info.at(i));
       if (
         result.info.at(i).pv &&
         result.info.at(i).pv.split(" ")[0] == result.bestmove &&
@@ -105,7 +105,7 @@ app.get("/engineAnalysis/:fen", async (req, res) => {
         maxCenti = result.info.at(i).score.value;
       }
     }
-    console.log(resVal);
+    // console.log(resVal);
     res.status(200).send(resVal);
   } catch (e) {
     console.log(e);
@@ -137,37 +137,35 @@ app.get("/test", (req, res) => {
 app.get("/api/games/:fen", async (req, res) => {
   const fen = sanitizeString(req.params.fen);
   const results = await query({
-    sql: `SELECT event, site, date, white_elo, black_elo, result, next_move, white.name, black.name FROM positions
-        JOIN games ON positions.game_id = games.id
-        JOIN players AS white ON games.white_id = white.id
-        JOIN players AS black ON games.black_id = black.id
-        WHERE fen = ?
-        LIMIT 20`,
+    sql: `SELECT event, site, date, white_elo, black_elo, result, pos.next_move, white.name, black.name
+          FROM (SELECT next_move, game_id FROM positions WHERE fen = ?) AS pos
+          JOIN games ON pos.game_id = games.id
+          JOIN (SELECT id, name FROM players) AS white ON games.white_id = white.id
+          JOIN (SELECT id, name FROM players) AS black ON games.black_id = black.id
+          LIMIT 20`,
     values: [fen],
     nestTables: true,
   });
-  console.log(results);
   res.send(results);
 });
 
 // api gets the win rate of all the games with a given fen
 app.get("/api/games/:fen/winrate", async (req, res) => {
   const fen = sanitizeString(req.params.fen);
-  console.log(fen);
-  console.log(req.params.fen);
   const results = await query({
-    sql: `SELECT result, COUNT(*) AS count FROM positions
-        JOIN games ON positions.game_id = games.id
-        WHERE fen = ?
-        GROUP BY result`,
+    sql: `SELECT games.result, COUNT(*) AS count
+        FROM (SELECT game_id, fen FROM positions WHERE fen = ?) AS pos
+        JOIN (SELECT id, result FROM games) AS games ON pos.game_id = games.id
+        GROUP BY games.result`,
     values: [fen],
     nestTables: true,
   });
+
   const winRateResult = { white: 0, black: 0, draw: 0 };
   results.forEach((item) => {
     winRateResult[item.games.result] = item[""].count;
   });
-  console.log(winRateResult);
+  // console.log(winRateResult);
   res.send(winRateResult);
 });
 
@@ -241,7 +239,7 @@ app.get("/api/table", async (req, res) => {
         results[i].games.eco_subcategory?.toString();
       formattedResults.push(entry);
     }
-    console.log(formattedResults, sqlQuery, minElo);
+    // console.log(formattedResults, sqlQuery, minElo);
     res.send(formattedResults);
   } catch (e) {
     console.log(e);

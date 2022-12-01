@@ -201,7 +201,7 @@ function ChessBoardPage({ theme }) {
                     >
                         <li>
                           {samePositionGames.length > 0
-                            ? [...samePositionGames].map(({ games, white, black, positions }, index) => (
+                            ? [...samePositionGames].map(({ games, white, black, pos }, index) => (
                                 <ul key={`item-${index}`}>
                                     <ListItem
                                         sx={{
@@ -210,7 +210,7 @@ function ChessBoardPage({ theme }) {
                                             width: '100%',
                                             height: '100%',
                                         }}
-                                        onClick={() => positions.next_move && handleMove(positions.next_move)}
+                                        onClick={() => pos.next_move && handleMove(pos.next_move)}
                                     >
                                         <ListItemText
                                             primary={
@@ -222,13 +222,14 @@ function ChessBoardPage({ theme }) {
                                                         width: '100px',
                                                     }}
                                                 >
-                                                    {positions.next_move || 'N/A'}
+                                                    {pos.next_move || 'N/A'}
                                                 </Typography>
                                             }
                                         />
                                         <ListItemText primary={`${white.name} (${games.white_elo}) vs
                                         ${black.name} (${games.black_elo})
-                                        - ${new Date(games.date).toDateString()}`} />
+                                        - ${new Date(games.date).toDateString()}`}
+                                      />
                                         
                                     </ListItem>
                                 </ul>))
