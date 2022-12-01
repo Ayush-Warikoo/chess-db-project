@@ -9,7 +9,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 
 import ChessBoardPage from './components/ChessBoardPage';
 import DataTablePage from './components/DataTablePage';
-import AddGame from './components/AddGame';
+import AddGamePage from './components/AddGamePage';
 import Header from "./components/Header";
 import ProfilePage from "./components/ProfilePage";
 import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
@@ -48,7 +48,7 @@ function App() {
                     <Routes>
                         <Route path="/" element={<ChessBoardPage theme={theme}/>} />
                         <Route path="/datatable" element={<DataTablePage theme={theme}/>} />
-                        <Route path="/addgame" element={<AddGame theme={theme}/>} />
+                        <Route path="/addgame" element={<AddGamePage theme={theme}/>} />
                         <Route path="/profile/:name" element={<ProfilePage theme={theme}/>} />
                     </Routes>
                 </Router>

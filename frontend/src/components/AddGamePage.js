@@ -34,7 +34,7 @@ const rejectStyle = {
 };
 
 
-function AddGame({ theme }) {
+function AddGamePage({ theme }) {
     const [files, setFiles] = useState([]);
 
     const onDrop = useCallback((acceptedFiles) => {
@@ -126,8 +126,8 @@ function AddGame({ theme }) {
         progress: undefined,
         theme,
       });
-      // acceptedFiles.splice(0, acceptedFiles.length);
-      // setFiles(acceptedFiles);
+      acceptedFiles.splice(0, acceptedFiles.length);
+      setFiles([]);
     }
   
     function sendFiles(fileTexts) {
@@ -169,4 +169,4 @@ function AddGame({ theme }) {
     );
 }
 
-export default AddGame;
+export default AddGamePage;
