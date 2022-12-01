@@ -39,15 +39,7 @@ function ChessBoardPage({ theme }) {
         const result = await fetch(`http://localhost:5000/engineAnalysis/${encodeURIComponent(game.current.fen())}`);
         const data = await result.json();
         const halfMoves = data.pv?.split(" ");
-        const moves = [];
-        let offset = 0;
-        if (game.current.turn() === ChessJS.BLACK) {
-            moves.push(halfMoves[0]);
-            offset = 1;
-        }
-        for (let i = offset; i < 11; i += 2) {
-            moves.push(`${halfMoves[i]} ${halfMoves[i + 1]}`);
-        }
+        const moves = [data.pv];
         setEngineEval(data.score.value);
         setEngineMoves(moves);
     }
