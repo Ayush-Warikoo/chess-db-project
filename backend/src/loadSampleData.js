@@ -6,19 +6,23 @@ const path = require('path');
 
 const loadSampleData = async () => {
 
+  await resetDatabase()
+
   console.log("Loading sample data!");
 
-  const names = fs.readdirSync('res', {withFileTypes: true})
+  const names = fs.readdirSync('res/sample', {withFileTypes: true})
     .filter(item => !item.isDirectory())
     .map(item => item.name);
 
+  const fileList = [];
   for (var i = 0; i < names.length; i++) {
-    const buffer = fs.readFileSync("res/" + names[i]);
-    const results = await addGame(buffer.toString());
+    const buffer = fs.readFileSync("res/sample/" + names[i]);
+    const results = await addGame([buffer.toString()]);
   }
+  await addGame(fileList);
 
   const selectByFen = await query({
-    sql: `SELECT event, site, date, white_elo, black_elo, result, white.name, black.name FROM positions
+    sql: `SELECT event, site, date, white_elo, black_elo, result, next_move, white.name, black.name FROM positions
     JOIN games ON positions.game_id = games.id
     JOIN players AS white ON games.white_id = white.id
     JOIN players AS black ON games.black_id = black.id
@@ -113,6 +117,100 @@ const loadSampleData = async () => {
 
   pool.end();
   console.log("Done loading sample data!");
+};
+
+
+
+async function resetDatabase() {
+  console.log("Resetting Database");
+
+  const dropIndex = await query({
+    sql: `alter table positions drop index fen_index;`,
+    values: [],
+    nestTables: true
+  });
+
+  const dropPositions = await query({
+    sql: `
+    drop table positions;`,
+    values: [],
+    nestTables: true
+  });
+
+  const dropGames = await query({
+    sql: `
+    drop table games;`,
+    values: [],
+    nestTables: true
+  });
+
+  const dropPlayers = await query({
+    sql: `
+    drop table players;`,
+    values: [],
+    nestTables: true
+  });
+
+
+  const createPlayerTable = await query({
+    sql: `create table players (
+      id int not null primary key auto_increment,
+      name varchar(255) not null unique,
+      profile_pic_url varchar(255),
+      bio text,
+      birth_date date
+    );`,
+    values: [],
+    nestTables: true
+  });
+
+  const createGamesTable = await query({
+    sql: `create table games (
+      id int not null primary key auto_increment,
+      event varchar(255) not null,
+      site varchar(255) not null,
+      date date not null,
+      main_time int not null check (0 <= main_time),
+      increment_time int not null check (0 <= increment_time),
+      white_id int not null,
+      black_id int not null,
+      white_elo int not null check (0 <= white_elo),
+      black_elo int not null check (0 <= black_elo),
+      result enum('white', 'black', 'draw') not null,
+      eco_category enum('A', 'B', 'C', 'D', 'E'),
+      eco_subcategory int check (0 <= eco_subcategory and eco_subcategory <= 99),
+      plycount int not null check (0 <= plycount),
+    
+      constraint chk_total_time_neq_0 check (main_time + increment_time != 0),
+      constraint fk_white_id foreign key (white_id) references players(id),
+      constraint fk_black_id foreign key (black_id) references players(id),
+      constraint chk_white_id_neq_black_id check (white_id != black_id)
+    );`,
+    values: [],
+    nestTables: true
+  });
+
+  const createPositionsTable = await query({
+    sql: `create table positions (
+      id int not null primary key auto_increment,
+      game_id int not null,
+      fen varchar(255) not null,
+      move_number int not null check (-1 < move_number),
+      next_move varchar(10),
+      prev_move varchar(10),
+      constraint fk_game_id foreign key (game_id) references games(id)
+    );`,
+    values: [],
+    nestTables: true
+  });
+
+  const createIndex = await query({
+    sql: `create index fen_index
+    on positions (fen);`,
+    values: [],
+    nestTables: true
+  });
+
 };
 
 loadSampleData();

@@ -1,0 +1,251 @@
+Resetting Database
+Loading production data!
+Selected by Fen Test:
+[
+  {
+    games: {
+      event: 'FICS rated standard game',
+      site: 'FICS freechess.org',
+      date: 2021-01-31T05:00:00.000Z,
+      white_elo: 2708,
+      black_elo: 1646,
+      result: 'white'
+    },
+    white: { name: 'exeComp' },
+    black: { name: 'Bjboy' }
+  },
+  {
+    games: {
+      event: 'FICS rated standard game',
+      site: 'FICS freechess.org',
+      date: 2021-01-31T05:00:00.000Z,
+      white_elo: 2245,
+      black_elo: 1900,
+      result: 'white'
+    },
+    white: { name: 'MIHAILOP' },
+    black: { name: 'mcstorytaller' }
+  },
+  {
+    games: {
+      event: 'FICS rated standard game',
+      site: 'FICS freechess.org',
+      date: 2021-01-31T05:00:00.000Z,
+      white_elo: 2795,
+      black_elo: 1538,
+      result: 'white'
+    },
+    white: { name: 'Abysses' },
+    black: { name: 'rudiExample' }
+  },
+  {
+    games: {
+      event: 'FICS rated standard game',
+      site: 'FICS freechess.org',
+      date: 2021-01-30T05:00:00.000Z,
+      white_elo: 2107,
+      black_elo: 2021,
+      result: 'white'
+    },
+    white: { name: 'AndrePompeu' },
+    black: { name: 'ionelmorariu' }
+  },
+  {
+    games: {
+      event: 'FICS rated standard game',
+      site: 'FICS freechess.org',
+      date: 2021-01-30T05:00:00.000Z,
+      white_elo: 1899,
+      black_elo: 2278,
+      result: 'black'
+    },
+    white: { name: 'iNfiniThNiker' },
+    black: { name: 'MIHAILOP' }
+  },
+  {
+    games: {
+      event: 'FICS rated standard game',
+      site: 'FICS freechess.org',
+      date: 2021-01-28T05:00:00.000Z,
+      white_elo: 2316,
+      black_elo: 1893,
+      result: 'white'
+    },
+    white: { name: 'MIHAILOP' },
+    black: { name: 'mcstorytaller' }
+  },
+  {
+    games: {
+      event: 'FICS rated standard game',
+      site: 'FICS freechess.org',
+      date: 2021-01-28T05:00:00.000Z,
+      white_elo: 2314,
+      black_elo: 1895,
+      result: 'white'
+    },
+    white: { name: 'MIHAILOP' },
+    black: { name: 'mcstorytaller' }
+  },
+  {
+    games: {
+      event: 'FICS rated standard game',
+      site: 'FICS freechess.org',
+      date: 2021-01-28T05:00:00.000Z,
+      white_elo: 2312,
+      black_elo: 1897,
+      result: 'white'
+    },
+    white: { name: 'MIHAILOP' },
+    black: { name: 'mcstorytaller' }
+  },
+  {
+    games: {
+      event: 'FICS rated standard game',
+      site: 'FICS freechess.org',
+      date: 2021-01-28T05:00:00.000Z,
+      white_elo: 1756,
+      black_elo: 2310,
+      result: 'black'
+    },
+    white: { name: 'naylor' },
+    black: { name: 'MIHAILOP' }
+  },
+  {
+    games: {
+      event: 'FICS rated standard game',
+      site: 'FICS freechess.org',
+      date: 2021-01-28T05:00:00.000Z,
+      white_elo: 2322,
+      black_elo: 1899,
+      result: 'white'
+    },
+    white: { name: 'MIHAILOP' },
+    black: { name: 'mcstorytaller' }
+  }
+]
+Win Rate Result Test:
+{ white: 39, black: 16, draw: 9 }
+Selected by Black Victories:
+[
+  {
+    id: 2,
+    date: 2021-01-31T05:00:00.000Z,
+    white_player: 'Ruvarashe',
+    white_elo: 1976,
+    black_player: 'exeComp',
+    black_elo: 1976,
+    result: 'black',
+    event: 'FICS rated standard game',
+    site: 'FICS freechess.org'
+  },
+  {
+    id: 64,
+    date: 2021-01-31T05:00:00.000Z,
+    white_player: 'Ruvarashe',
+    white_elo: 1980,
+    black_player: 'MIHAILOP',
+    black_elo: 1980,
+    result: 'black',
+    event: 'FICS rated standard game',
+    site: 'FICS freechess.org'
+  },
+  {
+    id: 251,
+    date: 2021-01-29T05:00:00.000Z,
+    white_player: 'Ruvarashe',
+    white_elo: 1980,
+    black_player: 'exeComp',
+    black_elo: 1980,
+    result: 'black',
+    event: 'FICS rated standard game',
+    site: 'FICS freechess.org'
+  },
+  {
+    id: 320,
+    date: 2021-01-29T05:00:00.000Z,
+    white_player: 'Ruvarashe',
+    white_elo: 1980,
+    black_player: 'exeComp',
+    black_elo: 1980,
+    result: 'black',
+    event: 'FICS rated standard game',
+    site: 'FICS freechess.org'
+  },
+  {
+    id: 352,
+    date: 2021-01-28T05:00:00.000Z,
+    white_player: 'Ruvarashe',
+    white_elo: 1980,
+    black_player: 'exeComp',
+    black_elo: 1980,
+    result: 'black',
+    event: 'FICS rated standard game',
+    site: 'FICS freechess.org'
+  },
+  {
+    id: 412,
+    date: 2021-01-28T05:00:00.000Z,
+    white_player: 'Ruvarashe',
+    white_elo: 1980,
+    black_player: 'exeComp',
+    black_elo: 1980,
+    result: 'black',
+    event: 'FICS rated standard game',
+    site: 'FICS freechess.org'
+  },
+  {
+    id: 422,
+    date: 2021-01-28T05:00:00.000Z,
+    white_player: 'Ruvarashe',
+    white_elo: 1980,
+    black_player: 'exeComp',
+    black_elo: 1980,
+    result: 'black',
+    event: 'FICS rated standard game',
+    site: 'FICS freechess.org'
+  },
+  {
+    id: 432,
+    date: 2021-01-28T05:00:00.000Z,
+    white_player: 'Ruvarashe',
+    white_elo: 1991,
+    black_player: 'foggydew',
+    black_elo: 1991,
+    result: 'black',
+    event: 'FICS rated standard game',
+    site: 'FICS freechess.org'
+  },
+  {
+    id: 440,
+    date: 2021-01-28T05:00:00.000Z,
+    white_player: 'Ruvarashe',
+    white_elo: 1996,
+    black_player: 'exeComp',
+    black_elo: 1996,
+    result: 'black',
+    event: 'FICS rated standard game',
+    site: 'FICS freechess.org'
+  },
+  {
+    id: 443,
+    date: 2021-01-28T05:00:00.000Z,
+    white_player: 'Ruvarashe',
+    white_elo: 1996,
+    black_player: 'exeComp',
+    black_elo: 1996,
+    result: 'black',
+    event: 'FICS rated standard game',
+    site: 'FICS freechess.org'
+  }
+]
+Update Player Test:
+ResultSetHeader {
+  fieldCount: 0,
+  affectedRows: 1,
+  insertId: 0,
+  info: 'Rows matched: 1  Changed: 1  Warnings: 0',
+  serverStatus: 2,
+  warningStatus: 0,
+  changedRows: 1
+}
+Done testing prod data!

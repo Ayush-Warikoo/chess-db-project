@@ -31,10 +31,9 @@
 
 ### Loading production data and running tests (test-production.sql)
 
-1. Download a sizeable pgn collection from https://www.ficsgames.org/download.html, use data spanning months or years.
-2. Drag the files in the Add Game UI on the front end and submit the files.
-3. Run `npm run test-prod-data`
-4. Look at the output and it should be similar to test-sample.out except have the production values
+1. The production data is a months collection of games from https://www.ficsgames.org/download.html and is found in res/production
+2. Run `npm run test-prod-data`, note this may take a while to insert all of the production data, the actual processing is quick
+3. Compare the output to test-production.out
 
 ### Installing Stock Fish Engine
 
@@ -55,13 +54,16 @@
 3. Navigate to `http://localhost:3000/` to view the web application
 
 
-
 ## Features
 
-- Get a list of all games that have reached a particular position by moving pieces on a chessboard
+- Play a game on a chessboard, with the ability to undo moves, reset or flip the board
+- Get a list of all games that have reached a particular position, and their next moves
 - Get percentage of games that have ended in a draw, win, or loss from that position
 - Add games to the dataset by uploading a PGN file
+- Delete games from the dataset via the Data Table page
+- View and update player profiles via the Data Table page
 - Get a list of all games that meet a set of criteria (white player name, black player name, minimum elo, result, etc.)
+- Get the engine evaluation and stockfish 15 recommended moves for a given position
 
 ## Troubleshooting
 

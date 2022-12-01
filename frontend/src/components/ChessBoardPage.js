@@ -2,10 +2,11 @@ import React, { useEffect, useRef, useState } from 'react';
 import * as ChessJS from 'chess.js';
 import { Chessboard } from 'react-chessboard';
 import { Button, Card, CardContent, List, ListItem, ListItemText, Typography } from '@mui/material';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
-import { isPawnPromotion, switchColor, calculateWinrate } from './helper';
+import { isPawnPromotion, switchColor, calculateWinrate, calculateEvalBarPixels } from './helper';
 import { WHITE } from './constants';
-import TEST_DATA from '../testData';
 
 function ChessBoardPage({ theme }) {
     const game = useRef();
@@ -26,6 +27,7 @@ function ChessBoardPage({ theme }) {
     async function getGameData() {
         const result = await fetch(`http://localhost:5000/api/games/${encodeURIComponent(game.current.fen())}`);
         const data = await result.json();
+        console.log(data);
         setSamePositionGames(data);
     }
 
@@ -51,8 +53,8 @@ function ChessBoardPage({ theme }) {
     }, []);
 
     function handleMove(move) {
-        const piece = game.current.get(move.from);
-        if (isPawnPromotion(move, piece)) {
+        const piece = move.from && game.current.get(move.from);
+        if (piece && isPawnPromotion(move, piece)) {
             console.log('promotion');
             move.promotion = 'q';
         }
@@ -70,18 +72,34 @@ function ChessBoardPage({ theme }) {
     function checkGameStatus() {
         if (game.current.isDraw()) {
             setGameOver(true);
-            alert('Game over, drawn position');
+            toast.info('Game is drawn', {
+              position: 'top-right',
+              autoClose: 2000,
+              closeOnClick: true,
+              pauseOnHover: true,
+              progress: undefined,
+              theme,
+              icon: false
+            });
         } else if (game.current.isGameOver()) {
             setGameOver(true);
             const winner = game.current.turn() === WHITE ? 'black' : 'white';
-            alert('Game over, ' + winner + ' wins!');
+            toast.info(`Game over, ${winner} wins`, {
+              position: 'top-right',
+              autoClose: 2000,
+              closeOnClick: true,
+              pauseOnHover: true,
+              progress: undefined,
+              theme,
+              icon: false
+          });
         }
     }
 
     function onDrop(sourceSquare, targetSquare) {
         if (gameOver) return;
         const proposedMove = { from: sourceSquare, to: targetSquare };
-        handleMove(proposedMove, true);
+        handleMove(proposedMove);
     }
 
     function handleUndo() {
@@ -112,8 +130,8 @@ function ChessBoardPage({ theme }) {
                         {engineEval/100}
                     </Typography>
                     <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', width: '100%' }}>
-                        <div style={{ width: '40px', height: '500px', backgroundColor: 'white', borderRadius: '20px', border: `2px solid ${theme === 'light' ? 'black' : 'white'}`, marginRight: '20px' }}>
-                            <div style={{ width: `36px`, height: `${250 + engineEval*(-25/100)}px`, backgroundColor: 'black', borderRadius: '20px 20px 0px 0px' }}>
+                        <div style={{ width: '40px', height: '500px', backgroundColor: engineEval > -1000 ? 'white' : 'black', borderRadius: '20px', border: `2px solid ${theme === 'light' ? 'black' : 'white'}`, marginRight: '20px' }}>
+                            <div style={{ width: `36px`, height: `${calculateEvalBarPixels(engineEval)}px`, backgroundColor: 'black', borderRadius: '20px 20px 0px 0px' }}>
                             </div>
                         </div>
                     </div>
@@ -186,7 +204,8 @@ function ChessBoardPage({ theme }) {
                         }}
                     >
                         <li>
-                            {[...samePositionGames, ...TEST_DATA].map(({ games, white, black }, index) => (
+                          {samePositionGames.length > 0
+                            ? [...samePositionGames].map(({ games, white, black, positions }, index) => (
                                 <ul key={`item-${index}`}>
                                     <ListItem
                                         sx={{
@@ -195,16 +214,36 @@ function ChessBoardPage({ theme }) {
                                             width: '100%',
                                             height: '100%',
                                         }}
+                                        onClick={() => positions.next_move && handleMove(positions.next_move)}
                                     >
+                                        <ListItemText
+                                            primary={
+                                                <Typography
+                                                    sx={{
+                                                        fontWeight: 'bold',
+                                                        fontSize: '1.2rem',
+                                                        textAlign: 'left',
+                                                        width: '100px',
+                                                    }}
+                                                >
+                                                    {positions.next_move || 'N/A'}
+                                                </Typography>
+                                            }
+                                        />
                                         <ListItemText primary={`${white.name} (${games.white_elo}) vs
                                         ${black.name} (${games.black_elo})
                                         - ${new Date(games.date).toDateString()}`} />
+                                        
                                     </ListItem>
-                                </ul>))}
+                                </ul>))
+                                : <Typography variant="body1" color="text.secondary" sx={{ textAlign: 'center', marginTop: '100px'}}>
+                                    No games found with this position
+                                  </Typography>}
                         </li>
                     </List>
                 </div>
             </div>
+            <ToastContainer />
         </div>
     );
 }
