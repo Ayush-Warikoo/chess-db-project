@@ -13,10 +13,10 @@ const corsOptions = {
 var engine1;
 
 async function initEngine() {
-    engine1 = new Engine(process.env.STOCK_FISH_ENG_PATH);
-    await engine1.init();
-    await engine1.setoption('MultiPv', '4');
-    await engine1.setoption('Skill Level', '20');
+  engine1 = new Engine(process.env.STOCK_FISH_ENG_PATH);
+  await engine1.init();
+  await engine1.setoption("MultiPv", "4");
+  await engine1.setoption("Skill Level", "20");
 }
 
 initEngine();
@@ -87,26 +87,39 @@ app.post("/api/addGame", async (req, res) => {
 });
 
 app.get("/engineAnalysis/:fen", async (req, res) => {
-    try{
-        let ret = await engine1.isready();
-        await engine1.position(sanitizeString(req.params.fen));
-        const result = await engine1.go({depth: 15});
-        console.log(result.bestmove);
-        let resVal;
-        let maxCenti = -9999;
-        for(let i = 1; i < result.info.length; i++){
-            console.log(result.info.at(i));
-            if(result.info.at(i).pv && result.info.at(i).pv.split(" ")[0] == result.bestmove && result.info.at(i).score.value >= maxCenti) {
-                resVal = result.info.at(i);
-                maxCenti = result.info.at(i).score.value;
-            }
-        }
-        console.log(resVal);
-        res.status(200).send(resVal);
-    } catch (e) {
-        console.log(e);
-        res.status(500).send({error: "server error"});
+  try {
+    let ret = await engine1.isready();
+    await engine1.position(sanitizeString(req.params.fen));
+    const result = await engine1.go({ depth: 15 });
+    console.log(result.bestmove);
+    let resVal;
+    let maxCenti = -9999;
+    for (let i = 1; i < result.info.length; i++) {
+      console.log(result.info.at(i));
+      if (
+        result.info.at(i).pv &&
+        result.info.at(i).pv.split(" ")[0] == result.bestmove &&
+        result.info.at(i).score.value >= maxCenti
+      ) {
+        resVal = result.info.at(i);
+        maxCenti = result.info.at(i).score.value;
+      }
     }
+    console.log(resVal);
+    res.status(200).send(resVal);
+  } catch (e) {
+    console.log(e);
+    res.status(500).send({ error: "server error" });
+  }
+});
+
+app.get("/api/games/:id/positions", async (req, res) => {
+  const { id } = req.params;
+  const results = await query(
+    "select * from positions where game_id = ? order by move_number asc",
+    [id]
+  );
+  res.send(results);
 });
 
 app.post("/api/games/removeGame", async (req, res) => {
