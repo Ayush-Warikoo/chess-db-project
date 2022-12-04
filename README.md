@@ -1,13 +1,24 @@
 # CS348-project
-# Getting Started
-## Creating and Loading the Sample Database
 
-### Installing MySQL locally
+## Project Description
+
+### Walkthrough
+
+Video Demo: <https://www.youtube.com/watch?v=vdpV1gWqXR8>
+
+### Database Schema Architecture
+
+!["ER Diagram"](./readme-assets/ER-Diagram.png)
+
+## Getting Started
+### Creating and Loading the Sample Database
+
+#### Installing MySQL locally
 
 1. Download the MySQL installer ([link for Windows 10](https://dev.mysql.com/get/Downloads/MySQLInstaller/mysql-installer-web-community-8.0.31.0.msi))
 2. Install with all default options
 
-### Creating the database
+#### Creating the database
 
 1. Open MySQL Workbench
 2. Run `create database chessdb;`
@@ -19,29 +30,29 @@
 2. Paste the contents `backend/config/sample.txt` into `dev.env`
 3. Replace `<replace_with_your_password>` with the password set during your MySQL installation
 
-### Running database migrations
+#### Running database migrations
 
 1. To upgrade to the latest version of the database, run `npm run db-migrate up`
 2. To downgrade to the previous version of the database, run `npm run db-migrate down`
 
-### Loading sample data and run sql files (test-sample.sql)
+#### Loading sample data and run sql files (test-sample.sql)
 
 1. Run `npm run load-sample-data`
 2. Compare the output to test-sample.out
 
-### Loading production data and running tests (test-production.sql)
+#### Loading production data and running tests (test-production.sql)
 
 1. The production data is a months collection of games from https://www.ficsgames.org/download.html and is found in res/production
 2. Run `npm run test-prod-data`, note this may take a while to insert all of the production data, the actual processing is quick
 3. Compare the output to test-production.out
 
-### Installing Stock Fish Engine
+#### Installing Stock Fish Engine
 
 1. Download the appropriate executable for the Stock Fish Engine based on your computer architecture ([link for download](https://stockfishchess.org/download/))
 2. Locate the path of the executable/application file from the download
 3. Add this file path to the STOCK_FISH_ENG_PATH variable in the dev.env or .env file
 
-## Running the Application Locally
+### Running the Application Locally
 
 1. Run the backend
     - Navigate to the `/backend` folder
