@@ -1,4 +1,4 @@
-# CS348-project
+# Chess Database Project
 
 ## Project Description
 
